@@ -1,0 +1,34 @@
+{
+  "name": "eth-contract-hello-world",
+  "version": "1.0.0",
+  "description": "Hello World smart contract",
+  "license": "AGPL-3.0-only",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test",
+    "clean": "rm -rf node_modules && rm -f package-lock.json",
+    "reset": "rm -rf artifacts cache && npm run clean && npm install && npx hardhat compile"
+  },
+  "author": {
+    "name": "StJohn Piano",
+    "linkedin": "https://www.linkedin.com/in/stjohnpiano",
+    "tela": "https://www.tela.app/magic/stjohn_piano/a852c8"
+  },
+  "imports": {
+    "#root/*.js": "./*.js"
+  },
+  "dependencies": {
+    "avj": "0.0.0",
+    "axios": "1.4.0",
+    "big.js": "6.2.1",
+    "commander": "11.0.0",
+    "dotenv": "16.2.0",
+    "ethers": "6.6.0",
+    "@nomicfoundation/hardhat-toolbox": "3.0.0",
+    "hardhat": "2.15.0",
+    "joi": "17.9.2",
+    "lodash": "4.17.21",
+    "prettier-standard": "16.4.1",
+    "winston": "3.9.0"
+  }
+}

@@ -1,0 +1,49 @@
+
+# Example commands for the scripts.
+
+
+node scripts/check-network-connections.js --debug
+
+[by default, the network is 'local']
+node scripts/get-network-fees.js
+
+node scripts/hello-world-deploy.js --network local
+
+node scripts/hello-world-deploy.js --network testnet
+
+node scripts/check-contract-exists.js --network testnet
+
+node scripts/hello-world-get-message.js
+
+node scripts/hello-world-update-message.js --input-file-json input-data/example-input-data-update-message.json --debug
+
+node scripts/hello-world-estimate-fees.js
+
+node scripts/hello-world-estimate-fees.js --network testnet
+
+node scripts/hello-world-estimate-fees.js --network mainnet
+
+node scripts/check-contract-exists.js --network local
+
+node scripts/check-contract-exists.js --network local --log-level info
+
+node scripts/check-contract-exists.js --network testnet --address-file input-data/example-contract-address.txt
+
+
+
+
+# Create a new Ethereum keypair and get its balance.
+
+
+node scripts/create-private-key.js > input-data/example-private-key.txt
+
+cat input-data/example-private-key.txt
+
+cat input-data/example-private-key.txt | node scripts/derive-address.js > input-data/example-address.txt
+
+cat input-data/example-address.txt
+
+node scripts/get-balance.js --address-file input-data/example-address.txt
+
+node scripts/get-balance.js --address 0x3bEC26B3cC2a1B0b123e9044E4D0085EfE9bF526
+

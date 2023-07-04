@@ -1,0 +1,89 @@
+version: '3'
+
+tasks:
+
+  hello:
+    desc: "Hello World from Task!"
+    cmds:
+      - echo 'Hello World from Task!'
+    silent: true
+
+  compile-contracts:
+    desc: "Compile the Solidity contracts"
+    cmds:
+      - npx hardhat compile
+    silent: true
+
+  reset:
+    desc: "Completely reset the NodeJS Hardhat environment"
+    cmds:
+      - npm run reset
+    silent: true
+
+  test:
+    desc: "Run the development tests using a temporary Hardhat node"
+    cmds:
+      - npx hardhat test
+    silent: true
+
+  show-example-script-commands:
+    desc: "Show the example script commands"
+    cmds:
+      - cat example-script-commands.txt
+    silent: true
+
+  check-js-formatting:
+    desc: "Check the formatting of the Javascript code"
+    cmds:
+      - npx prettier --check *
+    silent: true
+
+  fix-js-formatting:
+    desc: "Reformat the Javascript code"
+    cmds:
+      - npx prettier --write .
+    silent: true
+
+  start-local-node:
+    desc: "Start a local Hardhat node"
+    cmds:
+      - npx hardhat node
+    silent: true
+
+  check-network-connections:
+    desc: "Check the connections to the various Ethereum networks"
+    cmds:
+      - node scripts/check-network-connections.js
+    silent: true
+
+  deploy-local:
+    desc: "Deploy the HelloWorld contract to a Hardhat node running locally"
+    cmds:
+      - npx hardhat run scripts/hello-world-deploy.js --network local
+    silent: true
+
+  deploy-testnet:
+    desc: "Deploy the HelloWorld contract to the Sepolia testnet"
+    cmds:
+      - npx hardhat run scripts/hello-world-deploy.js --network sepolia
+    silent: true
+    prompt: This command will spend testnet Ethereum (SepoliaETH) - Do you want to continue?
+
+  deploy-mainnet:
+    desc: "Deploy the HelloWorld contract to the Ethereum mainnet"
+    cmds:
+      - npx hardhat run scripts/hello-world-deploy.js --network mainnet
+    silent: true
+    prompt: This command will spend Ethereum (ETH) - Do you want to continue?
+
+  hello-world-get-message:
+    internal: true
+    cmds:
+      - node scripts/hello-world-get-message.js {{.CLI_ARGS}}
+    silent: true
+
+  get-message:
+    desc: "Get the message from the HelloWorld contract"
+    cmds:
+      - task: hello-world-get-message
+    silent: true

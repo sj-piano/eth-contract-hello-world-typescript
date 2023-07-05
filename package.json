@@ -5,7 +5,7 @@
   "license": "AGPL-3.0-only",
   "main": "index.js",
   "scripts": {
-    "test": "npx hardhat test",
+    "test": "npx hardhat test --typecheck",
     "clean": "rm -rf node_modules && rm -f package-lock.json",
     "reset": "rm -rf artifacts cache && npm run clean && npm install && npx hardhat compile"
   },
@@ -18,17 +18,23 @@
     "#root/*.js": "./*.js"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "3.0.0",
     "avj": "0.0.0",
     "axios": "1.4.0",
     "big.js": "6.2.1",
     "commander": "11.0.0",
     "dotenv": "16.2.0",
     "ethers": "6.6.0",
-    "@nomicfoundation/hardhat-toolbox": "3.0.0",
     "hardhat": "2.15.0",
     "joi": "17.9.2",
     "lodash": "4.17.21",
     "prettier-standard": "16.4.1",
     "winston": "3.9.0"
+  },
+  "devDependencies": {
+    "@types/chai": "4.3.5",
+    "@types/mocha": "10.0.1",
+    "@types/node": "20.3.3",
+    "chai": "4.3.7"
   }
 }

@@ -1,7 +1,10 @@
-.env
+# Config files
+user_config.env
+
+# NodeJS
 node_modules
 
-# Hardhat files
+# Hardhat
 cache
 artifacts
 

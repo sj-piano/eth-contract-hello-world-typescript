@@ -1,17 +1,22 @@
-require("dotenv").config();
-require("@nomicfoundation/hardhat-toolbox");
+import dotenv from "dotenv";
+import { HardhatUserConfig } from "hardhat/config";
+import '@nomiclabs/hardhat-ethers';
+import "@nomicfoundation/hardhat-toolbox";
+
+
+dotenv.config();
 
 const {
   ETHERSCAN_API_KEY,
   SEPOLIA_TESTNET_INFURA_API_URL,
   ETHEREUM_MAINNET_INFURA_API_URL,
-  LOCAL_HARDHAT_PRIVATE_KEY,
+  LOCAL_HARDHAT_PRIVATE_KEY: string,
   SEPOLIA_TESTNET_PRIVATE_KEY,
   ETHEREUM_MAINNET_PRIVATE_KEY,
 } = process.env;
 
-module.exports = {
-  solidity: "0.7.3",
+const config: HardhatUserConfig = {
+  solidity: "0.8.20",
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {},
@@ -32,3 +37,5 @@ module.exports = {
     apiKey: ETHERSCAN_API_KEY,
   },
 };
+
+export default config;

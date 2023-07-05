@@ -1,9 +1,9 @@
 // Imports
-const { ethers } = require("hardhat");
-const { expect } = require("chai");
-const {
+import { ethers } from "hardhat";
+import { expect } from "chai";
+import {
   loadFixture,
-} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+} from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 // Tests
 

@@ -5,12 +5,12 @@ import "@nomicfoundation/hardhat-toolbox";
 
 dotenv.config({path: './user-config.env'});
 
-const ETHERSCAN_API_KEY: string = process.env.ETHERSCAN_API_KEY!;
-const SEPOLIA_TESTNET_INFURA_API_URL: string = process.env.SEPOLIA_TESTNET_INFURA_API_URL!;
-const ETHEREUM_MAINNET_INFURA_API_URL: string = process.env.ETHEREUM_MAINNET_INFURA_API_URL!;
-const LOCAL_HARDHAT_PRIVATE_KEY: string = process.env.LOCAL_HARDHAT_PRIVATE_KEY!;
-const SEPOLIA_TESTNET_PRIVATE_KEY: string = process.env.SEPOLIA_TESTNET_PRIVATE_KEY!;
-const ETHEREUM_MAINNET_PRIVATE_KEY: string = process.env.ETHEREUM_MAINNET_PRIVATE_KEY!;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY!;
+const SEPOLIA_TESTNET_INFURA_API_URL = process.env.SEPOLIA_TESTNET_INFURA_API_URL!;
+const ETHEREUM_MAINNET_INFURA_API_URL = process.env.ETHEREUM_MAINNET_INFURA_API_URL!;
+const LOCAL_HARDHAT_PRIVATE_KEY = process.env.LOCAL_HARDHAT_PRIVATE_KEY!;
+const SEPOLIA_TESTNET_PRIVATE_KEY = process.env.SEPOLIA_TESTNET_PRIVATE_KEY!;
+const ETHEREUM_MAINNET_PRIVATE_KEY = process.env.ETHEREUM_MAINNET_PRIVATE_KEY!;
 
 const config: HardhatUserConfig = {
   solidity: "0.8.20",

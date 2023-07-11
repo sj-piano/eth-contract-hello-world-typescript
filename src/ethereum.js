@@ -6,7 +6,7 @@ const ethers = require("ethers");
 const _ = require("lodash");
 
 // Local imports
-const { validateConfig } = require("#root/config.js");
+import { validateConfig } from "#root/config";
 const { validateLogger } = require("#root/lib/logging.js");
 import { validateNumericString } from "#root/lib/utils";
 

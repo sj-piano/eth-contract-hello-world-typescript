@@ -76,7 +76,7 @@
 
 **Description:**
 
-A complete "Hello World" Ethereum smart contract package, written in Solidity and Javascript. It is a ready-to-use template for an Ethereum smart contract development project.
+A complete "Hello World" Ethereum smart contract package, written in Solidity and Typescript. It is a ready-to-use template for an Ethereum smart contract development project.
 
 **Features:**
 * Handles post-merge fees correctly
@@ -117,13 +117,13 @@ If you would like to add me as a professional contact, you can [send me a connec
 
 
 The contract has been deployed to the Ethereum Mainnet at this address:  
-`0x50590A974646d333A93F89a37aBd2d2708671eAA`
+`[NOT DONE]`
 
 The contract is published here:  
-[etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code)
+[NOT DONE](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code)
 
 You can read the contract's stored data at:  
-[etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract)
+[NOT DONE](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -136,7 +136,7 @@ You can read the contract's stored data at:
 
 **Platforms & languages:**
 - [Ethereum](https://ethereum.org/en) & [Solidity](https://soliditylang.org)
-- [NodeJS](https://nodejs.org/en) & [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+- [NodeJS](https://nodejs.org/en) & [Typescript](https://www.typescriptlang.org)
 
 **Technologies & libraries:**
 - Task management: [`task`](https://taskfile.dev/)

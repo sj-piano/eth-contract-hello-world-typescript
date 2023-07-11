@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "rootDir": "./",
     "strict": true,
-    "target": "es2020"
+    "target": "es2022"
   },
   "exclude": [
     "node_modules",

@@ -13,12 +13,9 @@ function getMethods(obj: any): string[] {
   return [...properties].filter((item) => typeof obj[item] === "function");
 }
 
-function isNumericString(value: any): boolean {
-  if (typeof value !== "string") {
-    return false;
-  }
+function isNumericString(value: string): boolean {
   value = value.trim();
-  return !isNaN(value) && !isNaN(parseFloat(value));
+  return !isNaN(value as any) && !isNaN(parseFloat(value));
 }
 
 function validateNumericString(options: {
@@ -26,11 +23,6 @@ function validateNumericString(options: {
   value: string;
 }): string {
   const { name, value } = options;
-  if (typeof value !== "string") {
-    throw new Error(
-      `Received invalid value type for ${name}: value=${value}, type=${typeof value}`
-    );
-  }
   const trimmedValue = value.trim();
   if (trimmedValue.length === 0) {
     throw new Error(`Received empty or whitespace-only string for ${name}`);

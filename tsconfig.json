@@ -1,17 +1,30 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "baseUrl": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
-    "outDir": "./built",
+    "outDir": "./build",
+    "paths": {
+      "#root/*": ["*"],
+      "#lib/*": ["lib/*"],
+      "#src/*": ["src/*"],
+    },
     "resolveJsonModule": true,
     "rootDir": "./",
-    "skipLibCheck": true,
     "strict": true,
     "target": "es2020"
   },
-  "include": ["./lib/**/*", "./src/**/*"]
+  "exclude": [
+    "node_modules",
+    "build",
+  ],
+  "files": ["./hardhat.config.ts"],
+  "include": ["./lib/**/*", "./scripts/**/*", "./src/**/*", "./test/**/*"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

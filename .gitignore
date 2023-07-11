@@ -9,5 +9,5 @@ cache
 artifacts
 
 # Typescript
-built
+build
 typechain-types

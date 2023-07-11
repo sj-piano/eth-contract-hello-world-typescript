@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "A complete 'Hello World' Ethereum smart contract package, written in Solidity and Typescript.",
   "license": "AGPL-3.0-only",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean-build": "rm -rf build && npm run build",
     "test": "npx hardhat test --typecheck",
+    "ts-node": "IS_TS_NODE=true ts-node",
+    "tsc": "tsc",
     "clean": "rm -rf node_modules && rm -f package-lock.json",
     "reset": "rm -rf artifacts cache && npm run clean && npm install && npx hardhat compile"
   },
@@ -17,6 +21,11 @@
   "imports": {
     "#root/*.js": "./*.js"
   },
+  "_moduleAliases": {
+    "#root": "./build",
+    "#lib": "./build/lib",
+    "#src": "./build/src"
+  },
   "dependencies": {
     "avj": "0.0.0",
     "axios": "1.4.0",
@@ -26,15 +35,21 @@
     "ethers": "6.6.0",
     "joi": "17.9.2",
     "lodash": "4.17.21",
+    "module-alias": "2.2.3",
     "winston": "3.9.0"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "3.0.0",
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
+    "@types/module-alias": "2.0.1",
     "@types/node": "20.3.3",
     "chai": "4.3.7",
     "hardhat": "2.15.0",
-    "prettier-standard": "16.4.1"
-  }
+    "prettier-standard": "16.4.1",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "5.1.6"
+  },
+  "type": "commonjs"
 }

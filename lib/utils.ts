@@ -1,5 +1,5 @@
-/* Warning
-- config.js imports utils.js, so utils.js cannot import config.js.
+/* Important:
+- This file cannot import config.ts, because config.ts imports utils.ts.
 */
 
 function getMethods(obj: any): string[] {

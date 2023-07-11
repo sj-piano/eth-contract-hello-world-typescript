@@ -1,9 +1,9 @@
 // Package configuration values, stored in a class.
 
 // Imports
-const { ethers } = require("ethers");
-const Joi = require("joi");
-const _ = require("lodash");
+import _ from "lodash";
+import { ethers } from "ethers";
+import Joi from "joi";
 
 // Local imports
 import { validateNumericString } from "#root/lib/utils";
@@ -14,11 +14,28 @@ import { validateNumericString } from "#root/lib/utils";
 */
 
 class Config {
+  maxFeePerTransactionUsd: string;
+  _maxFeePerGasGwei: string;
+  _maxPriorityFeePerGasGwei: string;
+  gasLimitMultiplier: string;
+  averagePriorityFeeMultiplier: string;
+  eth_usd_price_url: string;
+  maxFeePerGasWei: string;
+  maxPriorityFeePerGasWei: string;
+  networkLabelList: string[];
+  mapNetworkLabelToNetwork: { [key: string]: string };
+  logLevelList: string[];
+  WEI_DP: number;
+  GWEI_DP: number;
+  ETH_DP: number;
+  USD_DP: number;
+  dummyAddress: string;
+
   constructor() {
     // Note: maxFeePerTransactionUsd overrides the other fee limits.
     this.maxFeePerTransactionUsd = "0";
-    this.maxFeePerGasGwei = "0";
-    this.maxPriorityFeePerGasGwei = "0";
+    this._maxFeePerGasGwei = "0";
+    this._maxPriorityFeePerGasGwei = "0";
     this.gasLimitMultiplier = "1.0";
     this.averagePriorityFeeMultiplier = "1.5";
     this.eth_usd_price_url =
@@ -42,12 +59,16 @@ class Config {
 
   // Setters
 
-  set maxFeePerGasGwei(newValue) {
+  set maxFeePerGasGwei(newValue: string) {
     this._maxFeePerGasGwei = newValue;
     this.maxFeePerGasWei = ethers.parseUnits(newValue, "gwei").toString();
   }
 
-  set maxPriorityFeePerGasGwei(newValue) {
+  get maxFeePerGasGwei(): string {
+    return this._maxFeePerGasGwei;
+  }
+
+  set maxPriorityFeePerGasGwei(newValue: string) {
     this._maxPriorityFeePerGasGwei = newValue;
     this.maxPriorityFeePerGasWei = ethers
       .parseUnits(newValue, "gwei")
@@ -60,7 +81,11 @@ class Config {
     MAX_FEE_PER_TRANSACTION_USD,
     MAX_FEE_PER_GAS_GWEI,
     MAX_PRIORITY_FEE_PER_GAS_GWEI,
-  }) {
+  } : {
+    MAX_FEE_PER_TRANSACTION_USD: string,
+    MAX_FEE_PER_GAS_GWEI: string,
+    MAX_PRIORITY_FEE_PER_GAS_GWEI: string,
+  }): void {
     if (!_.isNil(MAX_FEE_PER_GAS_GWEI)) {
       this.maxFeePerTransactionUsd = validateNumericString({
         name: "MAX_FEE_PER_TRANSACTION_USD",
@@ -82,7 +107,7 @@ class Config {
   }
 }
 
-async function validateConfig({ config }) {
+async function validateConfig({ config }: { config: Config }) {
   // For now, just confirm that it's an object.
   let schema = Joi.object().required();
   let result = schema.validate(config);
@@ -93,7 +118,8 @@ async function validateConfig({ config }) {
   return config;
 }
 
-module.exports = {
-  config: new Config(),
+let config = new Config();
+export {
+  config,
   validateConfig,
 };

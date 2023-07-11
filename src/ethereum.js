@@ -7,7 +7,7 @@ const _ = require("lodash");
 
 // Local imports
 import { validateConfig } from "#root/config";
-const { validateLogger } = require("#root/lib/logging.js");
+import { createLogger } from "#root/lib/logging";
 import { validateNumericString } from "#root/lib/utils";
 
 // Functions
@@ -80,7 +80,6 @@ function validateAddressesSync({ addresses }) {
 }
 
 async function contractFoundAt({ logger, provider, address }) {
-  validateLogger({ logger });
   if (!ethers.isAddress(address)) {
     throw new Error(`Address "${address}" is invalid.`);
   }
@@ -90,7 +89,6 @@ async function contractFoundAt({ logger, provider, address }) {
 }
 
 async function getGasPrices({ logger, provider }) {
-  validateLogger({ logger });
   const block = await provider.getBlock("latest");
   const blockNumber = block.number.toString();
   const baseFeePerGasWei = block.baseFeePerGas.toString();
@@ -130,7 +128,6 @@ async function getGasPrices({ logger, provider }) {
 
 async function getEthereumPriceInUsd({ logger, config }) {
   validateConfig({ config });
-  validateLogger({ logger });
   try {
     const response = await axios.get(config.eth_usd_price_url);
     const price = response.data.price;
@@ -143,7 +140,6 @@ async function getEthereumPriceInUsd({ logger, config }) {
 
 async function getGasPricesWithFiat({ config, logger, provider }) {
   validateConfig({ config });
-  validateLogger({ logger });
   // Include fiat values for gas prices.
   const gasPrices = await getGasPrices({ logger, provider });
   const ethToUsd = await getEthereumPriceInUsd({ logger, config });
@@ -168,7 +164,6 @@ async function getGasPricesWithFiat({ config, logger, provider }) {
 async function estimateFees({ config, logger, provider, txRequest }) {
   // We examine a specific transaction request and estimate its fees, taking into account the limits specified in config.
   validateConfig({ config });
-  validateLogger({ logger });
   const { log, deb } = logger;
   let feeLimitKeys = "baseFeePerGasWei baseFeeUsd maxFeeUsd".split(" ");
   let feeLimitChecks = {};

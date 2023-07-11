@@ -6,7 +6,7 @@ const Joi = require("joi");
 const _ = require("lodash");
 
 // Local imports
-const { validateNumericString } = require("#root/lib/utils.js");
+import { validateNumericString } from "#root/lib/utils";
 
 /* Notes:
 - The main application or script will load the config, apply changes from cmdline arguments and environment variables if required, and pass it to the other modules or functions as an object.

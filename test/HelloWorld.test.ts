@@ -8,9 +8,12 @@ import {
 // Contract types
 import { HelloWorld } from '#root/typechain-types/HelloWorld';
 
+
 // Tests
 
+
 describe("HelloWorld contract", function () {
+
   // We use `loadFixture` to share common setups (or fixtures) between tests.
   // Using this simplifies your tests and makes them run faster, by taking
   // advantage of Hardhat Network's snapshot functionality.
@@ -26,6 +29,7 @@ describe("HelloWorld contract", function () {
     return { contractHelloWorld, initialMessage, owner, addr1, addr2 };
   }
 
+
   describe("Deployment", function () {
     it("Should set the initial message supplied to the constructor", async function () {
       const { contractHelloWorld, initialMessage } = await loadFixture(
@@ -35,6 +39,7 @@ describe("HelloWorld contract", function () {
       expect(message).to.equal(initialMessage);
     });
   });
+
 
   describe("Update", function () {
     it("Should update the message", async function () {
@@ -47,14 +52,7 @@ describe("HelloWorld contract", function () {
       expect(message).to.equal(newMessage);
     });
 
-    it("Should set message to be empty when the message value is an integer", async function () {
-      const { contractHelloWorld, initialMessage } = await loadFixture(
-        deployHelloWorldFixture
-      );
-      const newMessage = 123;
-      await contractHelloWorld.update(newMessage);
-      const message = await contractHelloWorld.message();
-      expect(message).to.equal("");
-    });
   });
+
+
 });

@@ -46,7 +46,7 @@ function validatePrivateKeysSync({ privateKeys }: { privateKeys: Record<string, 
   for (const [name, privateKey] of _.entries(privateKeys)) {
     validatePrivateKeySync({ privateKey, name });
   }
-  return privateKeys;
+  return true;
 }
 
 function deriveAddressSync({ privateKey }: { privateKey: string }) {
@@ -62,7 +62,7 @@ function validateAddressSync({ address, name }: { address: string, name?: string
     let msg = `Address ${nameSection}("${address}") is invalid.`;
     throw new Error(msg);
   }
-  return address;
+  return true;
 }
 
 function validateAddressesSync({ addresses }: { addresses: Record<string, string> }) {
@@ -80,7 +80,7 @@ function validateAddressesSync({ addresses }: { addresses: Record<string, string
   for (const [name, address] of _.entries(addresses)) {
     validateAddressSync({ address, name });
   }
-  return addresses;
+  return true;
 }
 
 async function contractFoundAt({ logger, provider, address }: { logger: Logger, provider: Provider, address: string }) {

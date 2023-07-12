@@ -3,7 +3,6 @@
 // Imports
 import _ from "lodash";
 import { ethers } from "ethers";
-import Joi from "joi";
 
 // Local imports
 import { validateNumericString } from "#root/lib/utils";

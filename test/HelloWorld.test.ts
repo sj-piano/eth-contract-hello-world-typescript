@@ -5,6 +5,9 @@ import {
   loadFixture,
 } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
+// Contract types
+import { HelloWorld } from '#root/typechain-types/HelloWorld';
+
 // Tests
 
 describe("HelloWorld contract", function () {
@@ -12,10 +15,11 @@ describe("HelloWorld contract", function () {
   // Using this simplifies your tests and makes them run faster, by taking
   // advantage of Hardhat Network's snapshot functionality.
   async function deployHelloWorldFixture() {
+    let contractHelloWorld: HelloWorld;
     const [owner, addr1, addr2] = await ethers.getSigners();
     const initialMessage = "Hello World!";
     const constructorArgs = [initialMessage];
-    const contractHelloWorld = await ethers.deployContract(
+    contractHelloWorld = await ethers.deployContract(
       "HelloWorld",
       constructorArgs
     );

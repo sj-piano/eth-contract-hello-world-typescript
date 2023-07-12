@@ -18,24 +18,28 @@ function createPrivateKeySync() {
   return privateKey;
 }
 
-function validatePrivateKeySync({ privateKey, name }: { privateKey: string, name?: string }) {
+function privateKeyIsValidSync({ privateKey, name }: { privateKey: string, name?: string }) : { valid: boolean, msg: string } {
+  let nameSection = !_.isUndefined(name) ? `${name} ` : "";
+  if (!ethers.isHexString(privateKey)) {
+    let msg = `Private key ${nameSection}("${privateKey}") is not a hex string.`;
+    return { valid: false, msg };
+  }
   if (!ethers.isHexString(privateKey, 32)) {
-    let nameSection = !_.isUndefined(name) ? `${name} ` : "";
-    let msg = `Private key ${nameSection}("${privateKey}") is invalid.`;
+    let msg = `Private key ${nameSection}("${privateKey}") is a hex string that it is ${ethers.dataLength(privateKey)} bytes long. But: It should be 32 bytes long.`;
+    return { valid: false, msg };
+  }
+  return { valid: true, msg: ""};
+}
+
+function validatePrivateKeySync({ privateKey, name }: { privateKey: string, name?: string }) {
+  let { valid, msg } = privateKeyIsValidSync({ privateKey, name });
+  if (!valid) {
     throw new Error(msg);
   }
-  return privateKey;
+  return true;
 }
 
 function validatePrivateKeysSync({ privateKeys }: { privateKeys: Record<string, string> }) {
-  if (_.isArray(privateKeys)) {
-    throw new Error(
-      `Private keys "${privateKeys}" must be an object, not an array.`
-    );
-  }
-  if (!_.isObject(privateKeys)) {
-    throw new Error(`Private keys "${privateKeys}" must be an object.`);
-  }
   if (!_.keys(privateKeys).length) {
     throw new Error(`Private keys "${privateKeys}" must not be empty.`);
   }
@@ -319,6 +323,7 @@ async function estimateFees({ config, logger, provider, txRequest }: { config: C
 // Exports
 export default {
   createPrivateKeySync,
+  privateKeyIsValidSync,
   validatePrivateKeySync,
   validatePrivateKeysSync,
   deriveAddressSync,

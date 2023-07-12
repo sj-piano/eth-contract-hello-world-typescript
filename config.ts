@@ -107,19 +107,8 @@ class Config {
   }
 }
 
-async function validateConfig({ config }: { config: Config }) {
-  // For now, just confirm that it's an object.
-  let schema = Joi.object().required();
-  let result = schema.validate(config);
-  if (result.error) {
-    console.error(`config: ${config}`);
-    throw new Error(`Invalid config: ${result.error}`);
-  }
-  return config;
-}
-
 let config = new Config();
 export {
+  Config,
   config,
-  validateConfig,
 };

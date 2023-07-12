@@ -23,7 +23,7 @@
     "build",
   ],
   "files": ["./hardhat.config.ts"],
-  "include": ["./lib/**/*", "./scripts/**/*", "./src/**/*", "./test/**/*"],
+  "include": ["./*.ts", "./lib/**/*", "./scripts/**/*", "./src/**/*", "./test/**/*"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   }

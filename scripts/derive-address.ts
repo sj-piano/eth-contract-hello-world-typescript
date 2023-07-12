@@ -1,11 +1,11 @@
 // Imports
-const fs = require("fs");
+import fs from "fs";
 
 // Local imports
-const ethereum = require("#root/src/ethereum.js");
+import ethereum from "#src/ethereum";
 
 // Logging
-const log = console.log;
+const log2 = console.log;
 
 // Read stdin
 const pipedString = fs.readFileSync(process.stdin.fd).toString().trim();
@@ -16,4 +16,4 @@ const privateKey = pipedString;
 // Run
 const address = ethereum.deriveAddressSync({ privateKey });
 ethereum.validateAddressSync({ address });
-log(address);
+log2(address);

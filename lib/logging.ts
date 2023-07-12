@@ -42,28 +42,28 @@ class Logger {
     this.logger.level = logLevel;
   };
 
-  deb(message: any) {
-    this.debug(message);
+  deb(...args: any[]) {
+    this.debug(args);
   }
 
-  log(message: any) {
-    this.info(message);
+  log(...args: any[]) {
+    this.info(args);
   }
 
-  debug(message: any) {
-    this.logger.debug(message);
+  debug(...args: any[]) {
+    this.logger.debug(args);
   }
 
-  info(message: any) {
-    this.logger.info(message);
+  info(...args: any[]) {
+    this.logger.info(args);
   }
 
-  warn(message: any) {
-    this.logger.warn(message);
+  warn(...args: any[]) {
+    this.logger.warn(args);
   }
 
-  error(message: any) {
-    this.logger.error(message);
+  error(...args: any[]) {
+    this.logger.error(args);
   }
 
 }

@@ -6,7 +6,7 @@ import {
 } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 // Contract types
-import { HelloWorld } from '#root/typechain-types/HelloWorld';
+import { HelloWorld } from '#src/typechain-types/HelloWorld';
 
 
 // Tests

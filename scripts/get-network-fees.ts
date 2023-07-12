@@ -1,16 +1,16 @@
 // Imports
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const Joi = require("joi");
-const _ = require("lodash");
+import { program } from "commander";
+import 'dotenv/config';
+import { ethers } from "ethers";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
 // Load environment variables
-require("dotenv").config();
 const { INFURA_API_KEY_NAME } = process.env;
 
 // Logging
@@ -59,9 +59,9 @@ const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 // Setup
 
-let provider;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Error";
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);

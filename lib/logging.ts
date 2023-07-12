@@ -43,27 +43,33 @@ class Logger {
   };
 
   deb(...args: any[]) {
-    this.debug(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.debug(arg);
   }
 
   log(...args: any[]) {
-    this.info(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.info(arg);
   }
 
   debug(...args: any[]) {
-    this.logger.debug(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.logger.debug(arg);
   }
 
   info(...args: any[]) {
-    this.logger.info(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.logger.info(arg);
   }
 
   warn(...args: any[]) {
-    this.logger.warn(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.logger.warn(arg);
   }
 
   error(...args: any[]) {
-    this.logger.error(args);
+    let arg = args.length == 1 ? args[0] : args;
+    this.logger.error(arg);
   }
 
 }

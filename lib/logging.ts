@@ -1,7 +1,7 @@
 // Imports
 import Joi from "joi";
 import winston from "winston";
-const { combine, timestamp, printf, colorize, align, json } = winston.format;
+const { combine, printf, colorize, align, json } = winston.format;
 
 // Local imports
 import { config } from "#root/config";
@@ -11,18 +11,26 @@ import { config } from "#root/config";
 class Logger {
   logger: winston.Logger;
 
-  constructor( { logLevel }: {logLevel?: string} = {logLevel: 'error'}) {
+  constructor( { logLevel, timestamp }: {logLevel?: string, timestamp?: boolean} = {logLevel: 'error'}) {
+    // Choose log format.
+    const logFormat = (info: any) => {
+      if (timestamp) {
+        return `${info.timestamp} ${info.level}: ${info.message}`;
+      } else {
+        return `${info.level}: ${info.message}`;
+      }
+    }
     this.logger = winston.createLogger({
       level: logLevel,
       //format: winston.format.cli(),
       //format: winston.format.json(),
       format: combine(
         colorize({ all: true }),
-        timestamp({
+        winston.format.timestamp({
           format: "YYYY-MM-DD HH:mm:ss.SSS",
         }),
         align(),
-        printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
+        printf(logFormat),
       ),
       transports: [new winston.transports.Console()],
     });
@@ -76,8 +84,8 @@ class Logger {
 
 // Functions
 
-function createLogger({logLevel}: {logLevel: string} = { logLevel: 'error'}) {
-  const logger = new Logger({ logLevel });
+function createLogger({logLevel, timestamp}: {logLevel?: string, timestamp?: boolean} = { logLevel: 'error', timestamp: false}) {
+  const logger = new Logger({ logLevel, timestamp });
   const log = logger.log.bind(logger);
   const deb = logger.deb.bind(logger);
   return { logger, log, deb };

@@ -11,14 +11,20 @@ import { config } from "#root/config";
 class Logger {
   logger: winston.Logger;
 
-  constructor( { logLevel, timestamp }: {logLevel?: string, timestamp?: boolean} = {logLevel: 'error'}) {
-    // Choose log format.
+  constructor( { fileName, logLevel, timestamp }: {fileName?: string, logLevel?: string, timestamp?: boolean} = {fileName: '', logLevel: 'error', timestamp: false}) {
+    if (fileName) {
+      fileName = fileName.replace(process.cwd() + '/', "");
+    }
+    // Build log format.
     const logFormat = (info: any) => {
-      if (timestamp) {
-        return `${info.timestamp} ${info.level}: ${info.message}`;
-      } else {
-        return `${info.level}: ${info.message}`;
+      let s = `${info.level}: ${info.message}`;
+      if (fileName) {
+        s = `${fileName}: ` + s;
       }
+      if (timestamp) {
+        s = `${info.timestamp} ` + s;
+      }
+      return s;
     }
     this.logger = winston.createLogger({
       level: logLevel,
@@ -84,8 +90,9 @@ class Logger {
 
 // Functions
 
-function createLogger({logLevel, timestamp}: {logLevel?: string, timestamp?: boolean} = { logLevel: 'error', timestamp: false}) {
-  const logger = new Logger({ logLevel, timestamp });
+//function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = { fileName: '', logLevel: 'error', timestamp: false}) {
+function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean}) {
+  const logger = new Logger({ fileName, logLevel, timestamp });
   const log = logger.log.bind(logger);
   const deb = logger.deb.bind(logger);
   return { logger, log, deb };

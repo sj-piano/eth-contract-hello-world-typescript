@@ -91,7 +91,7 @@ class Logger {
 // Functions
 
 //function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = { fileName: '', logLevel: 'error', timestamp: false}) {
-function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean}) {
+function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = {}) {
   const logger = new Logger({ fileName, logLevel, timestamp });
   const log = logger.log.bind(logger);
   const deb = logger.deb.bind(logger);

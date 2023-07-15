@@ -10,7 +10,8 @@ function getMethods(obj: any): string[] {
       properties.add(item)
     );
   } while ((currentObj = Object.getPrototypeOf(currentObj)));
-  return [...properties].filter((item) => typeof obj[item] === "function");
+  let methods = [...properties].filter((item) => typeof obj[item] === "function");
+  return methods.sort();
 }
 
 function isNumericString(value: string): boolean {
@@ -37,8 +38,11 @@ function validateNumericString(options: {
   return trimmedValue;
 }
 
-export {
+const sleep = ({seconds} : {seconds: number}) => new Promise((r) => setTimeout(r, seconds * 1000));
+
+export default {
   getMethods,
   isNumericString,
   validateNumericString,
+  sleep,
 }

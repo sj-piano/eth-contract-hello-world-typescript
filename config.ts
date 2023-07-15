@@ -5,7 +5,7 @@ import _ from "lodash";
 import { ethers } from "ethers";
 
 // Local imports
-import { validateNumericString } from "#root/lib/utils";
+import utils from "#root/lib/utils";
 
 /* Notes:
 - The main application or script will load the config, apply changes from cmdline arguments and environment variables if required, and pass it to the other modules or functions as an object.
@@ -81,26 +81,26 @@ class Config {
     MAX_FEE_PER_GAS_GWEI,
     MAX_PRIORITY_FEE_PER_GAS_GWEI,
   } : {
-    MAX_FEE_PER_TRANSACTION_USD: string,
-    MAX_FEE_PER_GAS_GWEI: string,
-    MAX_PRIORITY_FEE_PER_GAS_GWEI: string,
+    MAX_FEE_PER_TRANSACTION_USD: string | undefined,
+    MAX_FEE_PER_GAS_GWEI: string | undefined,
+    MAX_PRIORITY_FEE_PER_GAS_GWEI: string | undefined,
   }): void {
     if (!_.isNil(MAX_FEE_PER_GAS_GWEI)) {
-      this.maxFeePerTransactionUsd = validateNumericString({
+      this.maxFeePerTransactionUsd = utils.validateNumericString({
         name: "MAX_FEE_PER_TRANSACTION_USD",
-        value: MAX_FEE_PER_TRANSACTION_USD,
+        value: String(MAX_FEE_PER_TRANSACTION_USD),
       });
     }
     if (!_.isNil(MAX_FEE_PER_GAS_GWEI)) {
-      this.maxFeePerGasGwei = validateNumericString({
+      this.maxFeePerGasGwei = utils.validateNumericString({
         name: "MAX_FEE_PER_GAS_GWEI",
-        value: MAX_FEE_PER_GAS_GWEI,
+        value: String(MAX_FEE_PER_GAS_GWEI),
       });
     }
     if (!_.isNil(MAX_PRIORITY_FEE_PER_GAS_GWEI)) {
-      this.maxPriorityFeePerGasGwei = validateNumericString({
+      this.maxPriorityFeePerGasGwei = utils.validateNumericString({
         name: "MAX_PRIORITY_FEE_PER_GAS_GWEI",
-        value: MAX_PRIORITY_FEE_PER_GAS_GWEI,
+        value: String(MAX_PRIORITY_FEE_PER_GAS_GWEI),
       });
     }
   }

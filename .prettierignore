@@ -1,4 +1,11 @@
+artifacts
+build
+cache
+contracts
+images
 node_modules
 *.md
 *.yaml
 *.txt
+*.env
+*.env.example

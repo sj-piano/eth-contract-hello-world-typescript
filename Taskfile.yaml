@@ -35,7 +35,7 @@ tasks:
   check-js-formatting:
     desc: "Check the formatting of the Javascript code"
     cmds:
-      - npx prettier --check *
+      - npx prettier . --check
     silent: true
 
   fix-js-formatting:

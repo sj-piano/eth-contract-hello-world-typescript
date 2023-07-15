@@ -108,6 +108,9 @@ describe("Ethereum private key", function () {
   });
 
   describe("Test basic transactions", function () {
+    beforeEach(async function () {
+      await hre.network.provider.send("hardhat_reset");
+    });
 
     it("Should transfer 0 wei", async function () {
       const [addr1, addr2] = await ethers.getSigners();

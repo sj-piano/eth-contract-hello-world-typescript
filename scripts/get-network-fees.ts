@@ -1,6 +1,6 @@
 // Imports
 import { program } from "commander";
-import 'dotenv/config';
+import "dotenv/config";
 import { ethers } from "ethers";
 import Joi from "joi";
 import _ from "lodash";
@@ -88,10 +88,6 @@ main()
 async function main() {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
-  const fees = await ethereum.getGasPricesWithFiat({
-    config,
-    logger,
-    provider,
-  });
+  const fees = await ethereum.getGasPricesWithFiat({ provider });
   console.log(fees);
 }

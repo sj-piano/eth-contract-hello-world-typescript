@@ -6,9 +6,18 @@ import { ethers, Provider, TransactionRequest } from "ethers";
 import _ from "lodash";
 
 // Local imports
-import { Config } from "#root/config";
+import amounts from "#src/amounts";
+import { Config, config } from "#root/config";
 import { Logger, createLogger } from "#root/lib/logging";
-import { validateNumericString } from "#root/lib/utils";
+import security from "#src/security";
+import utils from "#root/lib/utils";
+
+// Controls
+let logLevel = "error";
+logLevel = "info";
+
+// Logging
+const { logger, log, deb } = createLogger({fileName: __filename, logLevel});
 
 // Functions
 
@@ -83,7 +92,14 @@ function validateAddressesSync({ addresses }: { addresses: Record<string, string
   return true;
 }
 
-async function contractFoundAt({ logger, provider, address }: { logger: Logger, provider: Provider, address: string }) {
+async function getBalanceETH({ provider, address }: { provider: Provider, address: string }) {
+  let balanceWei = await provider.getBalance(address);
+  let balanceEth = ethers.formatEther(balanceWei);
+  balanceEth = (new Big(balanceEth)).toFixed(config.ETH_DP);
+  return balanceEth;
+}
+
+async function contractFoundAt({ provider, address }: { provider: Provider, address: string }) {
   if (!ethers.isAddress(address)) {
     throw new Error(`Address "${address}" is invalid.`);
   }
@@ -92,7 +108,7 @@ async function contractFoundAt({ logger, provider, address }: { logger: Logger, 
   return true;
 }
 
-async function getGasPrices({ logger, provider }: { logger: Logger, provider: Provider }) {
+async function getGasPrices({ provider }: { provider: Provider }) {
   const block = await provider.getBlock("latest");
   const blockNumber = block?.number.toString() ?? "0";
   const baseFeePerGasWei = block?.baseFeePerGas?.toString() ?? "0";
@@ -130,7 +146,7 @@ async function getGasPrices({ logger, provider }: { logger: Logger, provider: Pr
   };
 }
 
-async function getEthereumPriceInUsd({ config, logger }: { config: Config, logger: Logger }) {
+async function getEthereumPriceInUsd() {
   try {
     const response = await axios.get(config.eth_usd_price_url);
     const price = response.data.price;
@@ -141,10 +157,10 @@ async function getEthereumPriceInUsd({ config, logger }: { config: Config, logge
   }
 }
 
-async function getGasPricesWithFiat({ config, logger, provider }: { config: Config, logger: Logger, provider: Provider }) {
+async function getGasPricesWithFiat({ provider }: { provider: Provider }) {
   // Include fiat values for gas prices.
-  const gasPrices = await getGasPrices({ logger, provider });
-  const ethToUsd = await getEthereumPriceInUsd({ logger, config });
+  const gasPrices = await getGasPrices({ provider });
+  const ethToUsd = await getEthereumPriceInUsd();
   const baseFeePerGasUsd = (
     Big(gasPrices.baseFeePerGasEth).mul(Big(ethToUsd))
   ).toFixed(config.ETH_DP);
@@ -163,9 +179,8 @@ async function getGasPricesWithFiat({ config, logger, provider }: { config: Conf
   };
 }
 
-async function estimateFees({ config, logger, provider, txRequest }: { config: Config, logger: Logger, provider: Provider, txRequest: TransactionRequest }) {
+async function estimateFees({ provider, txRequest }: { provider: Provider, txRequest: TransactionRequest }) {
   // We examine a specific transaction request and estimate its fees, taking into account the limits specified in config.
-  const { log, deb } = logger;
   let feeLimitKeys = "baseFeePerGasWei baseFeeUsd maxFeeUsd".split(" ");
   let feeLimitChecks: { [key: string]: any } = {};
   feeLimitKeys.forEach((key) => {
@@ -180,7 +195,7 @@ async function estimateFees({ config, logger, provider, txRequest }: { config: C
     .mul(Big(config.gasLimitMultiplier))
     .toFixed(0);
   deb(`gasLimit: ${gasLimit}`);
-  const gasPrices = await getGasPricesWithFiat({ config, logger, provider });
+  const gasPrices = await getGasPricesWithFiat({ provider });
   const {
     baseFeePerGasWei,
     baseFeePerGasGwei,
@@ -320,8 +335,116 @@ async function estimateFees({ config, logger, provider, txRequest }: { config: C
   };
 }
 
+async function sendEth({
+  networkLabel,
+  provider,
+  senderAddress,
+  receiverAddress,
+  amountEth,
+}: {
+  networkLabel: string;
+  provider: Provider;
+  senderAddress: string;
+  receiverAddress: string;
+  amountEth: string;
+}) {
+  let amountWei = amounts.ethToWei({amountEth});
+  let nonce = await provider.getTransactionCount(senderAddress);
+  let chainId = await provider.getNetwork().then((network) => network.chainId);
+  deb(`Sending ${amountEth} ETH from ${senderAddress} to ${receiverAddress} on network=${networkLabel} (chainId=${chainId})...`);
+  let basicPaymentGasLimit = "21000";
+  let txRequest = {
+    type: 2,
+    chainId,
+    from: senderAddress,
+    nonce,
+    gasLimit: BigInt(basicPaymentGasLimit),
+    to: receiverAddress,
+    value: BigInt(amountWei),
+  }
+  let estimatedFees = await estimateFees({ provider, txRequest });
+  //deb(estimatedFees)
+  const {
+    maxFeePerGasWei,
+    maxPriorityFeePerGasWei,
+    feeEth,
+    feeUsd,
+    feeLimitChecks,
+  } = estimatedFees;
+  if (feeLimitChecks.anyLimitExceeded) {
+    for (let key of feeLimitChecks.limitExceededKeys) {
+      let check = feeLimitChecks[key];
+      throw new Error(`${key}: ${check.msg}`);
+    }
+  }
+  const gasPrices = estimatedFees.gasPrices;
+  const { ethToUsd } = gasPrices;
+  _.assign(txRequest, {
+    maxFeePerGas: BigInt(maxFeePerGasWei),
+    maxPriorityFeePerGas: BigInt(maxPriorityFeePerGasWei),
+  });
+  let txResponse = await signAndSendTransaction({ networkLabel, provider, senderAddress, txRequest });
+  return txResponse;
+};
+
+async function signAndSendTransaction({
+  networkLabel,
+  provider,
+  senderAddress,
+  txRequest,
+}: {
+  networkLabel: string,
+  provider: Provider,
+  senderAddress: string,
+  txRequest: any,
+}) {
+  let txSigned = await security.signTransaction({ networkLabel, provider, senderAddress, txRequest });
+  //log(`txSigned: ${txSigned}`)
+  let txResponse = await provider.broadcastTransaction(txSigned);
+  let { hash } = txResponse;
+  deb(`Transaction broadcast to network. Hash: ${hash}`);
+  return txResponse;
+}
+
+async function getTxConfirms({ provider, txHash }: {
+  provider: Provider,
+  txHash: string,
+}) {
+  let blockNumber = await provider.getBlockNumber();
+  //deb(`blockNumber=${blockNumber}`)
+  let txReceipt = await provider.getTransactionReceipt(txHash);
+  if (txReceipt == null) {
+    //deb(`Transaction ${txHash} not found.`)
+    return 0;
+  }
+  //deb(`txReceipt.blockNumber=${txReceipt.blockNumber}`)
+  let confirmations = blockNumber - txReceipt.blockNumber + 1;
+  return confirmations;
+}
+
+async function getTxFees({ provider, txHash }: {
+  provider: Provider,
+  txHash: string,
+}) {
+  // We assume that the transaction is type 2 (EIP-1559).
+  let txReceipt = await provider.getTransactionReceipt(txHash);
+  if (txReceipt == null) {
+    //deb(`Transaction ${txHash} not found.`)
+    return {};
+  }
+  //let { gasUsed, gasPrice: effectiveGasPrice} = txReceipt;
+  let txFeeWei = txReceipt.fee.toString();
+  let txFeeEth = amounts.weiToEth({amountWei: txFeeWei});
+  return {
+    txFeeWei,
+    txFeeEth,
+  }
+}
+
+
 // Exports
 export default {
+  setLogLevel: logger.setLevel.bind(logger),
   createPrivateKeySync,
   privateKeyIsValidSync,
   validatePrivateKeySync,
@@ -329,9 +452,14 @@ export default {
   deriveAddressSync,
   validateAddressSync,
   validateAddressesSync,
+  getBalanceETH,
   contractFoundAt,
   getGasPrices,
   getEthereumPriceInUsd,
   getGasPricesWithFiat,
   estimateFees,
+  sendEth,
+  signAndSendTransaction,
+  getTxConfirms,
+  getTxFees,
 };

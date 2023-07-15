@@ -1,19 +1,14 @@
 // Imports
 import { ethers } from "hardhat";
 import { expect } from "chai";
-import {
-  loadFixture,
-} from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 // Contract types
-import { HelloWorld } from '#src/typechain-types/HelloWorld';
-
+import { HelloWorld } from "#src/typechain-types/HelloWorld";
 
 // Tests
 
-
 describe("HelloWorld contract", function () {
-
   // We use `loadFixture` to share common setups (or fixtures) between tests.
   // Using this simplifies your tests and makes them run faster, by taking
   // advantage of Hardhat Network's snapshot functionality.
@@ -29,7 +24,6 @@ describe("HelloWorld contract", function () {
     return { contractHelloWorld, initialMessage, owner, addr1, addr2 };
   }
 
-
   describe("Deployment", function () {
     it("Should set the initial message supplied to the constructor", async function () {
       const { contractHelloWorld, initialMessage } = await loadFixture(
@@ -39,7 +33,6 @@ describe("HelloWorld contract", function () {
       expect(message).to.equal(initialMessage);
     });
   });
-
 
   describe("Update", function () {
     it("Should update the message", async function () {
@@ -51,8 +44,5 @@ describe("HelloWorld contract", function () {
       const message = await contractHelloWorld.message();
       expect(message).to.equal(newMessage);
     });
-
   });
-
-
 });

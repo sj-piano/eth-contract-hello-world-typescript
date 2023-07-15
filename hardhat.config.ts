@@ -19,7 +19,12 @@ const config: HardhatUserConfig = {
   solidity: "0.8.20",
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {},
+    hardhat: {
+      mining: {
+        auto: true,
+        interval: 0,
+      }
+    },
     local: {
       url: "http://localhost:8545",
       accounts: [LOCAL_HARDHAT_PRIVATE_KEY],

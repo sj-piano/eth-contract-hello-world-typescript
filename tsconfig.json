@@ -10,22 +10,22 @@
     "paths": {
       "#root/*": ["*"],
       "#lib/*": ["lib/*"],
-      "#src/*": ["src/*"],
+      "#src/*": ["src/*"]
     },
     "resolveJsonModule": true,
     "rootDir": "./",
     "strict": true,
     "target": "es2022"
   },
-  "exclude": [
-    "node_modules",
-    "build",
-  ],
+  "exclude": ["node_modules", "build"],
   "files": ["./hardhat.config.ts"],
   "include": [
     "./*.ts",
-    "./lib/**/*", "./scripts/**/*", "./src/**/*",
-    "./test/**/*", "./typechain-types",
+    "./lib/**/*",
+    "./scripts/**/*",
+    "./src/**/*",
+    "./test/**/*",
+    "./typechain-types"
   ],
   "ts-node": {
     "require": ["tsconfig-paths/register"]

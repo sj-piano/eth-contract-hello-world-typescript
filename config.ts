@@ -80,10 +80,10 @@ class Config {
     MAX_FEE_PER_TRANSACTION_USD,
     MAX_FEE_PER_GAS_GWEI,
     MAX_PRIORITY_FEE_PER_GAS_GWEI,
-  } : {
-    MAX_FEE_PER_TRANSACTION_USD: string | undefined,
-    MAX_FEE_PER_GAS_GWEI: string | undefined,
-    MAX_PRIORITY_FEE_PER_GAS_GWEI: string | undefined,
+  }: {
+    MAX_FEE_PER_TRANSACTION_USD: string | undefined;
+    MAX_FEE_PER_GAS_GWEI: string | undefined;
+    MAX_PRIORITY_FEE_PER_GAS_GWEI: string | undefined;
   }): void {
     if (!_.isNil(MAX_FEE_PER_GAS_GWEI)) {
       this.maxFeePerTransactionUsd = utils.validateNumericString({
@@ -107,7 +107,4 @@ class Config {
 }
 
 let config = new Config();
-export {
-  Config,
-  config,
-};
+export { Config, config };

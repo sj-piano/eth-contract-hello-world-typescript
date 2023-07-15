@@ -11,9 +11,19 @@ import { config } from "#root/config";
 class Logger {
   logger: winston.Logger;
 
-  constructor( { fileName, logLevel, timestamp }: {fileName?: string, logLevel?: string, timestamp?: boolean} = {fileName: '', logLevel: 'error', timestamp: false}) {
+  constructor(
+    {
+      fileName,
+      logLevel,
+      timestamp,
+    }: { fileName?: string; logLevel?: string; timestamp?: boolean } = {
+      fileName: "",
+      logLevel: "error",
+      timestamp: false,
+    }
+  ) {
     if (fileName) {
-      fileName = fileName.replace(process.cwd() + '/', "");
+      fileName = fileName.replace(process.cwd() + "/", "");
     }
     // Build log format.
     const logFormat = (info: any) => {
@@ -25,7 +35,7 @@ class Logger {
         s = `${info.timestamp} ` + s;
       }
       return s;
-    }
+    };
     this.logger = winston.createLogger({
       level: logLevel,
       //format: winston.format.cli(),
@@ -36,14 +46,13 @@ class Logger {
           format: "YYYY-MM-DD HH:mm:ss.SSS",
         }),
         align(),
-        printf(logFormat),
+        printf(logFormat)
       ),
       transports: [new winston.transports.Console()],
     });
-
   }
 
-  setLevel({ logLevel } : { logLevel: string }) {
+  setLevel({ logLevel }: { logLevel: string }) {
     const logLevelSchema = Joi.string().valid(...config.logLevelList);
     let logLevelResult = logLevelSchema.validate(logLevel);
     if (logLevelResult.error) {
@@ -54,7 +63,7 @@ class Logger {
     }
     this.logger.transports.forEach((t) => (t.level = logLevel));
     this.logger.level = logLevel;
-  };
+  }
 
   deb(...args: any[]) {
     let arg = args.length == 1 ? args[0] : args;
@@ -85,13 +94,16 @@ class Logger {
     let arg = args.length == 1 ? args[0] : args;
     this.logger.error(arg);
   }
-
 }
 
 // Functions
 
 //function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = { fileName: '', logLevel: 'error', timestamp: false}) {
-function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = {}) {
+function createLogger({
+  fileName,
+  logLevel,
+  timestamp,
+}: { fileName?: string; logLevel?: string; timestamp?: boolean } = {}) {
   const logger = new Logger({ fileName, logLevel, timestamp });
   const log = logger.log.bind(logger);
   const deb = logger.deb.bind(logger);
@@ -100,7 +112,4 @@ function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLe
 
 // Exports
 
-export {
-  Logger,
-  createLogger,
-}
+export { Logger, createLogger };

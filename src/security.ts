@@ -17,14 +17,18 @@ let logLevel = "error";
 logLevel = "info";
 
 // Logging
-const { logger, log, deb } = createLogger({fileName: __filename, logLevel});
+const { logger, log, deb } = createLogger({ fileName: __filename, logLevel });
 
-
-async function signTransaction({ provider, senderAddress, networkLabel, txRequest }: {
-  provider: Provider,
-  senderAddress: string,
-  networkLabel: string,
-  txRequest: any,
+async function signTransaction({
+  provider,
+  senderAddress,
+  networkLabel,
+  txRequest,
+}: {
+  provider: Provider;
+  senderAddress: string;
+  networkLabel: string;
+  txRequest: any;
 }) {
   let privateKey = "";
   let found = false;
@@ -48,7 +52,6 @@ async function signTransaction({ provider, senderAddress, networkLabel, txReques
   return tx;
 }
 
-
 export default {
   signTransaction,
-}
+};

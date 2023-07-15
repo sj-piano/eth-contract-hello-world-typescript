@@ -10,7 +10,9 @@ function getMethods(obj: any): string[] {
       properties.add(item)
     );
   } while ((currentObj = Object.getPrototypeOf(currentObj)));
-  let methods = [...properties].filter((item) => typeof obj[item] === "function");
+  let methods = [...properties].filter(
+    (item) => typeof obj[item] === "function"
+  );
   return methods.sort();
 }
 
@@ -38,11 +40,12 @@ function validateNumericString(options: {
   return trimmedValue;
 }
 
-const sleep = ({seconds} : {seconds: number}) => new Promise((r) => setTimeout(r, seconds * 1000));
+const sleep = ({ seconds }: { seconds: number }) =>
+  new Promise((r) => setTimeout(r, seconds * 1000));
 
 export default {
   getMethods,
   isNumericString,
   validateNumericString,
   sleep,
-}
+};

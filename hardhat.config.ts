@@ -6,11 +6,13 @@ import "@nomicfoundation/hardhat-toolbox";
 // This adds support for typescript paths mappings
 import "tsconfig-paths/register";
 
-dotenv.config({path: './user-config.env'});
+dotenv.config({ path: "./user-config.env" });
 
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY!;
-const SEPOLIA_TESTNET_INFURA_API_URL = process.env.SEPOLIA_TESTNET_INFURA_API_URL!;
-const ETHEREUM_MAINNET_INFURA_API_URL = process.env.ETHEREUM_MAINNET_INFURA_API_URL!;
+const SEPOLIA_TESTNET_INFURA_API_URL =
+  process.env.SEPOLIA_TESTNET_INFURA_API_URL!;
+const ETHEREUM_MAINNET_INFURA_API_URL =
+  process.env.ETHEREUM_MAINNET_INFURA_API_URL!;
 const LOCAL_HARDHAT_PRIVATE_KEY = process.env.LOCAL_HARDHAT_PRIVATE_KEY!;
 const SEPOLIA_TESTNET_PRIVATE_KEY = process.env.SEPOLIA_TESTNET_PRIVATE_KEY!;
 const ETHEREUM_MAINNET_PRIVATE_KEY = process.env.ETHEREUM_MAINNET_PRIVATE_KEY!;
@@ -23,7 +25,7 @@ const config: HardhatUserConfig = {
       mining: {
         auto: true,
         interval: 0,
-      }
+      },
     },
     local: {
       url: "http://localhost:8545",

@@ -31,10 +31,15 @@ function privateKeyIsValidSync({
   privateKey,
   name,
 }: {
-  privateKey: string;
+  privateKey: string | undefined;
   name?: string;
 }): { valid: boolean; msg: string } {
   let nameSection = !_.isUndefined(name) ? `${name} ` : "";
+  if (_.isUndefined(privateKey)) {
+    let msg = `Private key ${nameSection}("${privateKey}") is undefined.`;
+    return { valid: false, msg };
+    throw new Error(msg);
+  }
   if (!ethers.isHexString(privateKey)) {
     let msg = `Private key ${nameSection}("${privateKey}") is not a hex string.`;
     return { valid: false, msg };
@@ -52,7 +57,7 @@ function validatePrivateKeySync({
   privateKey,
   name,
 }: {
-  privateKey: string;
+  privateKey: string | undefined;
   name?: string;
 }) {
   let { valid, msg } = privateKeyIsValidSync({ privateKey, name });
@@ -65,7 +70,7 @@ function validatePrivateKeySync({
 function validatePrivateKeysSync({
   privateKeys,
 }: {
-  privateKeys: Record<string, string>;
+  privateKeys: Record<string, string | undefined>;
 }) {
   if (!_.keys(privateKeys).length) {
     throw new Error(`Private keys "${privateKeys}" must not be empty.`);

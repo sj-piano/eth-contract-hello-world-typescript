@@ -27,12 +27,13 @@ class Logger {
     }
     // Build log format.
     const logFormat = (info: any) => {
-      let s = `${info.level}: ${info.message}`;
+      let { level, message, timestamp } = info;
+      let s = `${level}: ${message}`;
       if (fileName) {
         s = `${fileName}: ` + s;
       }
       if (timestamp) {
-        s = `${info.timestamp} ` + s;
+        s = `${timestamp} ` + s;
       }
       return s;
     };

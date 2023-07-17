@@ -5,13 +5,15 @@
 node scripts/check-network-connections.js --debug
 
 [by default, the network is 'local']
-node scripts/get-network-fees.js
+npm run --silent ts-node scripts/get-network-fees.ts
 
 node scripts/hello-world-deploy.js --network local
 
 node scripts/hello-world-deploy.js --network testnet
 
-node scripts/check-contract-exists.js --network testnet
+npm run --silent ts-node scripts/check-contract-exists.ts
+
+npm run --silent ts-node scripts/check-contract-exists.ts -- --network testnet --debug
 
 node scripts/hello-world-get-message.js
 
@@ -27,7 +29,7 @@ node scripts/check-contract-exists.js --network local
 
 node scripts/check-contract-exists.js --network local --log-level info
 
-node scripts/check-contract-exists.js --network testnet --address-file input-data/example-contract-address.txt
+npm run --silent ts-node scripts/check-contract-exists.ts -- --network testnet --address-file input-data/example-contract-address.txt
 
 
 

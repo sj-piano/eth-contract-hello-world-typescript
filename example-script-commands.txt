@@ -45,6 +45,10 @@ npm run --silent ts-node scripts/hello-world-get-message.ts -- --network mainnet
 
 npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/example-update-message.json --debug
 
+npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/example-update-message.json --debug --network testnet
+
+npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/example-update-message.json --debug --network mainnet
+
 
 
 

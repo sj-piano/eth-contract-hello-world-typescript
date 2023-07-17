@@ -1,17 +1,21 @@
 // Imports
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const fs = require("fs");
-const Joi = require("joi");
-const _ = require("lodash");
+import { program } from "commander";
+import { ethers } from "ethers";
+import fs from "fs";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
 // Load environment variables
-require("dotenv").config();
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const {
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,
@@ -94,9 +98,10 @@ if (fs.existsSync(addressFile)) {
 
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
-let provider;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
+let DEPLOYED_CONTRACT_ADDRESS: string | undefined;
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
@@ -111,6 +116,7 @@ if (networkLabel == "local") {
   DEPLOYED_CONTRACT_ADDRESS = ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS;
 }
 log(msg);
+provider = provider!;
 // Supplied contract file takes precedence over shell environment variable.
 if (contractAddress) {
   DEPLOYED_CONTRACT_ADDRESS = contractAddress;
@@ -122,7 +128,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  provider
+  provider,
 );
 
 // Run main function
@@ -140,8 +146,8 @@ async function main() {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
-  let address = contractHelloWorld.target;
-  let check = await ethereum.contractFoundAt({ logger, provider, address });
+  let address = await contractHelloWorld.getAddress();
+  let check = await ethereum.contractFoundAt({ provider, address });
   if (!check) {
     logger.error(`No contract found at address ${address}.`);
     process.exit(1);

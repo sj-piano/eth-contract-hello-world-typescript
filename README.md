@@ -21,10 +21,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/sj-piano/eth-contract-hello-world-javascript">
+  <a href="https://github.com/sj-piano/ethereum-smart-contract-project-template-typescript">
     <img src="images/glider_600x480.png" alt="Logo" width="300" height="240">
   </a>
-  <h3 align="center">A complete "Hello World" Ethereum smart contract package</h3>
+  <h3 align="center">A ready-for-production Ethereum smart contract project template</h3>
 </div>
 
 
@@ -76,13 +76,12 @@
 
 **Description:**
 
-A complete "Hello World" Ethereum smart contract package, written in Solidity and Typescript. It is a ready-to-use template for an Ethereum smart contract development project.
+A ready-for-production Ethereum smart contract project template, written in Solidity and Typescript.
 
 **Features:**
-* Handles post-merge fees correctly
-* Can estimate fees before any actual transactions are sent
-* Includes a test suite that runs on local Hardhat blockchain instance
-* Can deploy to local blockchain instance, Sepolia testnet, and Ethereum mainnet
+* Can estimate all fees before any actual transactions are sent
+* Includes a complete Hardhat test suite
+* Can deploy to a local Hardhat blockchain instance, Sepolia testnet, and Ethereum mainnet
 
 **Licensing:**
 * AGPL v3 software license
@@ -143,15 +142,15 @@ You can read the contract's stored data at:
 - NodeJS manager: [`nvm`](https://github.com/nvm-sh/nvm)
 - Ethereum library: [`ethers`](https://docs.ethers.org/v6)
 - Ethereum development environment: [`hardhat`](https://hardhat.org)
-- Decimal arithmetic: [`big.js`](https://mikemcl.github.io/big.js)
+- Decimal arithmetic: [`big.ts`](https://mikemcl.github.io/big.ts)
 - Test assertion: [`chai`](https://www.chaijs.com)
 - Javascript formatter: [`prettier-standard`](https://github.com/sheerun/prettier-standard)
-- CLI interface: [`commander`](https://github.com/tj/commander.js)
+- CLI interface: [`commander`](https://github.com/tj/commander.ts)
 - Logging: [`winston`](https://github.com/winstonjs/winston)
 - Data validation: [`joi`](https://github.com/hapijs/joi)
-- JSON validation: [`ajv`](https://ajv.js.org)
+- JSON validation: [`ajv`](https://ajv.ts.org)
 
-Private keys are managed in a `.env` file.
+Private keys are managed in a `user-config.env` file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -196,16 +195,18 @@ Notes:
 Clone the repo:
 
 ```sh
-git clone https://github.com/sj-piano/eth-contract-hello-world-javascript
+git clone https://github.com/sj-piano/ethereum-smart-contract-project-template-typescript
+
+mv ethereum-smart-contract-project-template-typescript contract-template
 ```
 
 Install NPM packages:
 
 ```sh
-cd eth-contract-hello-world-javascript && npm install
+cd contract-template && npm install
 ```
 
-Copy the file `.env.example` to `.env` and fill it in with the relevant values.
+Copy the file `user-config.env.example` to `user-config.env` and fill it in with the relevant values.
 
 **IMPORTANT: Pay particular attention to the settings in the top section: `FINANCIAL CONTROLS`**
 
@@ -215,7 +216,7 @@ Make sure that you are happy with these settings. If nothing else, be careful to
 
 Notes:
 
-* When you run a local hardhat node, it will have some built-in private keys and addresses that hold some test Ethereum. In `.env.example`, the `LOCAL_HARDHAT_PRIVATE_KEY` and `LOCAL_HARDHAT_ADDRESS` values hold the first of these keypairs.
+* When you run a local hardhat node, it will have some built-in private keys and addresses that hold some test Ethereum. In `user-config.env.example`, the `LOCAL_HARDHAT_PRIVATE_KEY` and `LOCAL_HARDHAT_ADDRESS` values hold the first of these keypairs.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -234,12 +235,12 @@ Notes:
 
 ### Notes
 
-`config.js` stores the configuration used within the entire package. You probably won't need to look at it. Settings in the `.env` file override it.
+`config.ts` stores the configuration used within the entire package. You probably won't need to look at it. Settings in the `user-config.env` file override it.
 
 Most scripts accept a `network` argument, which specifies whether the script should connect to the local development blockchain (`local`), the Sepolia testnet (`testnet`), or the Ethereum mainnet (`mainnet`).
 
 Most scripts have `--help` functionality. E.g. you can run:  
-`node scripts/hello-world-update-message.js --help`
+`npm run --silent ts-npm run --silent ts-node scripts/hello-world-update-message.ts -- --help`
 
 Most scripts can log at different levels of output. You can use `--log-level info` or `--debug` arguments.
 
@@ -254,16 +255,16 @@ See a list of examples that demonstrate how to use the various scripts:
 
 ### Fee Limit Protections
 
-The settings in the `.env` file under the top section `FINANCIAL CONTROLS` impose strict limits on the maximum cost of a transaction.
+The settings in the `user-config.env` file under the top section `FINANCIAL CONTROLS` impose strict limits on the maximum cost of a transaction.
 
-The two "action" scripts, `hello-world-deploy.js` and `hello-world-update-message.js`, will both refuse to broadcast a transaction if these limits are exceeded. Additionally, the `hello-world-estimate-fees.js` script will report that these limits will be exceeded.
+The two "action" scripts, `hello-world-deploy.ts` and `hello-world-update-message.ts`, will both refuse to broadcast a transaction if these limits are exceeded. Additionally, the `hello-world-estimate-fees.ts` script will report that these limits will be exceeded.
 
-You can of course change the limits in the `.env` file if you wish, allowing a script to spend more money in order to broadcast the transaction.
+You can of course change the limits in the `user-config.env` file if you wish, allowing a script to spend more money in order to broadcast the transaction.
 
 Example output:
 
 ```bash
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ node scripts/hello-world-estimate-fees.js
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-estimate-fees.ts
 
 Contract deployment - estimated fee:
 - baseFeeUsd limit exceeded: Base fee (0.60 USD) exceeds limit specified in config (0.01 USD). Current base fee is 315900.363483886 gwei (315900363483886 wei, 0.000315900363483886 ETH). Current ETH-USD exchange rate is 1914.12 USD.
@@ -271,15 +272,15 @@ Contract deployment - estimated fee:
 Contract method call: 'update' - estimated fee:
 - baseFeeUsd limit exceeded: Base fee (0.05 USD) exceeds limit specified in config (0.01 USD). Current base fee is 25406.370781243 gwei (25406370781243 wei, 0.000025406370781243 ETH). Current ETH-USD exchange rate is 1914.12 USD.
 
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ node scripts/get-balance.js --address-file input-data/local-hardhat-address.txt
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/get-balance.ts -- --address-file input-data/local-hardhat-address.txt
 9999.997914890304585096
 
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ node scripts/hello-world-deploy.js --log-level info
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-deploy.ts -- --log-level info
 [2023-07-02 22:28:29.666] info:         Connecting to local network at http://localhost:8545...
 [2023-07-02 22:28:29.984] info:         Estimated fee: 0.000005224714991797 ETH (0.01 USD)
 - baseFeeUsd: Base fee (0.60 USD) exceeds limit specified in config (0.01 USD). Current base fee is 315900.363483886 gwei (315900363483886 wei, 0.000315900363483886 ETH). Current ETH-USD exchange rate is 1913.98 USD.
 
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ node scripts/hello-world-update-message.js --input-file-json input-data/update-message-local-network.json
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/update-message-local-network.json
 - baseFeeUsd: Base fee (0.04 USD) exceeds limit specified in config (0.01 USD). Current base fee is 23505.742548599 gwei (23505742548599 wei, 0.000023505742548599 ETH). Current ETH-USD exchange rate is 1914.22 USD.
 ```
 
@@ -296,7 +297,7 @@ See available commands:
 ```sh
 task --list
 
-task -l
+# You can also use: task -l
 ```
 
 Run some initial tasks to check that everything is set up correctly.
@@ -310,7 +311,7 @@ task check-network-connections
 Note: You should see this error `Could not connect to local network`, because we haven't started a Hardhat local network yet.
 
 If `task check-network-connections` produces errors for connecting to testnet or mainnet, you can run the underlying script with the `--debug` flag:  
-`node scripts/check-network-connections.js --debug`
+`npm run --silent ts-node scripts/check-network-connections.ts -- --debug`
 
 Compile the contract and run the tests.
 
@@ -323,11 +324,11 @@ task test
 Check the fees on the various networks.
 
 ```sh
-node scripts/get-network-fees.js
+npm run --silent ts-node scripts/get-network-fees.ts
 
-node scripts/get-network-fees.js --network=testnet
+npm run --silent ts-node scripts/get-network-fees.ts -- --network=testnet
 
-node scripts/get-network-fees.js --network=mainnet
+npm run --silent ts-node scripts/get-network-fees.ts -- --network=mainnet
 ```
 
 
@@ -349,21 +350,21 @@ Open another terminal and run:
 Leave the node running in this additional terminal. Log output will be displayed (the initial set of pre-loaded keypairs will be shown). Press Ctrl-C to stop the local node. Switch back to the original terminal and continue.
 
 See the balance of the address that will deploy the contract:  
-`node scripts/get-balance.js --address-file input-data/local-hardhat-address.txt`
+`npm run --silent ts-node scripts/get-balance.ts -- --address-file input-data/local-hardhat-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
-`node scripts/hello-world-estimate-fees.js`
+`npm run --silent ts-node scripts/hello-world-estimate-fees.ts`
 
 Deploy the HelloWorld contract:  
-`node scripts/hello-world-deploy.js --log-level info`
+`npm run --silent ts-node scripts/hello-world-deploy.ts -- --log-level info`
 
-This will output an address. Copy this address into the `.env` file as `LOCAL_HARDHAT_DEPLOYED_CONTRACT_ADDRESS`.
+This will output an address. Copy this address into the `user-config.env` file as `LOCAL_HARDHAT_DEPLOYED_CONTRACT_ADDRESS`.
 
 Confirm deployment:  
-`node scripts/check-contract-exists`
+`npm run --silent ts-node scripts/check-contract-exists`
 
 Print the message stored in the contract:  
-`node scripts/hello-world-get-message.js`
+`npm run --silent ts-node scripts/hello-world-get-message.ts`
 
 Create a new input file:  
 `cp input-data/example-update-message.json input-data/update-message-local-network.json`
@@ -371,10 +372,10 @@ Create a new input file:
 Open it and specify a new message e.g. `Hello Mars ! (local)`.
 
 Update the message stored in the contract:  
-`node scripts/hello-world-update-message.js --input-file-json input-data/update-message-local-network.json`
+`npm run --silent ts-node scripts/hello-world-update-message.ts -- -- --input-file-json input-data/update-message-local-network.json`
 
 Print the new message stored in the contract:  
-`node scripts/hello-world-get-message.js`
+`npm run --silent ts-node scripts/hello-world-get-message.ts`
 
 Example output:
 
@@ -394,39 +395,39 @@ You'll need some SepoliaETH for using the Sepolia Testnet. In your Metamask wall
 We will use the `info` logging level throughout this walkthrough.
 
 Create a new private key and store it in the `input-data` directory:  
-`node scripts/create-private-key.js > input-data/sepolia-testnet-private-key.txt`
+`npm run --silent ts-node scripts/create-private-key.ts > input-data/sepolia-testnet-private-key.txt`
 
 Display the private key:  
 `cat input-data/sepolia-testnet-private-key.txt`
 
-Store it in the `.env` file as `SEPOLIA_TESTNET_PRIVATE_KEY`.
+Store it in the `user-config.env` file as `SEPOLIA_TESTNET_PRIVATE_KEY`.
 
 Derive an Ethereum address from the private key and store it in the `input-data` directory:  
-`cat input-data/sepolia-testnet-private-key.txt | node scripts/derive-address.js > input-data/sepolia-testnet-address.txt`
+`cat input-data/sepolia-testnet-private-key.txt | npm run --silent ts-node scripts/derive-address.ts > input-data/sepolia-testnet-address.txt`
 
 Display the address:  
 `cat input-data/sepolia-testnet-address.txt`
 
-Store it in the `.env` file as `SEPOLIA_TESTNET_ADDRESS`.
+Store it in the `user-config.env` file as `SEPOLIA_TESTNET_ADDRESS`.
 
 In Metamask, transfer a reasonable amount of SepoliaETH to this new address.
 
 See the balance of the address that will deploy the contract:  
-`node scripts/get-balance.js --network=testnet --log-level info --address-file input-data/sepolia-testnet-address.txt`
+`npm run --silent ts-node scripts/get-balance.ts --network=testnet --log-level info -- --address-file input-data/sepolia-testnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
-`node scripts/hello-world-estimate-fees.js --network=testnet`
+`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=testnet`
 
 Deploy the contract to the Sepolia testnet:  
-`node scripts/hello-world-deploy.js --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=testnet --log-level info`
 
-This will output an address. Copy this address into the `.env` file as `SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS`.
+This will output an address. Copy this address into the `user-config.env` file as `SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS`.
 
 Confirm deployment:  
-`node scripts/check-contract-exists --network=testnet --log-level info`
+`npm run --silent ts-node scripts/check-contract-exists -- --network=testnet --log-level info`
 
 Print the message stored in the contract:  
-`node scripts/hello-world-get-message.js --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet --log-level info`
 
 Create a new input file:
 `cp input-data/example-update-message.json input-data/update-message-sepolia-testnet.json`
@@ -434,10 +435,10 @@ Create a new input file:
 Open it and specify a new message e.g. `Hello Mars ! (testnet)`.
 
 Update the message stored in the contract:  
-`node scripts/hello-world-update-message.js --network=testnet --log-level info --input-file-json input-data/update-message-sepolia-testnet.json`
+`npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=testnet --log-level info --input-file-json input-data/update-message-sepolia-testnet.json`
 
 Print the new message stored in the contract:  
-`node scripts/hello-world-get-message.js --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet --log-level info`
 
 Example output:
 
@@ -466,7 +467,7 @@ We will use the `info` logging level throughout this walkthrough.
 
 In your Metamask wallet, create a dedicated "Test" account. Switch to "Ethereum Mainnet". We assume that you already have some Ethereum in Metamask or in another wallet tool. Transfer some ETH to this address. Copy the address.
 
-Store it in the `.env` file as `ETHEREUM_MAINNET_ADDRESS`.
+Store it in the `user-config.env` file as `ETHEREUM_MAINNET_ADDRESS`.
 
 Store it in the `input-data` directory in a new file called `ethereum-mainnet-address.txt`.
 
@@ -474,26 +475,26 @@ Now, export the corresponding private key from Metamask, using the following gui
 
 Metamask: [How to export an account's private key](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key)
 
-Store it in the `.env` file as `ETHEREUM_MAINNET_PRIVATE_KEY`.
+Store it in the `user-config.env` file as `ETHEREUM_MAINNET_PRIVATE_KEY`.
 
 Store it in the `input-data` directory in a new file called `ethereum-mainnet-private-key.txt`.
 
 See the balance of the address that will deploy the contract:  
-`node scripts/get-balance.js --network=mainnet --log-level info --address-file input-data/ethereum-mainnet-address.txt`
+`npm run --silent ts-node scripts/get-balance.ts -- --network=mainnet --log-level info --address-file input-data/ethereum-mainnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
-`node scripts/hello-world-estimate-fees.js --network=mainnet`
+`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet`
 
 Deploy the contract to the Ethereum mainnet:  
-`node scripts/hello-world-deploy.js --network=mainnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=mainnet --log-level info`
 
-This will output an address. Copy this address into the `.env` file as `ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS`.
+This will output an address. Copy this address into the `user-config.env` file as `ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS`.
 
 Confirm deployment:  
-`node scripts/check-contract-exists --network=mainnet --log-level info`
+`npm run --silent ts-node scripts/check-contract-exists -- --network=mainnet --log-level info`
 
 Print the message stored in the contract:  
-`node scripts/hello-world-get-message.js --network=mainnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=mainnet --log-level info`
 
 Create a new input file:  
 `cp input-data/example-update-message.json input-data/update-message-ethereum-mainnet.json`
@@ -501,16 +502,16 @@ Create a new input file:
 Open it and specify a new message e.g. `Hello Mars ! (mainnet)`.
 
 Update the message stored in the contract:  
-`node scripts/hello-world-update-message.js --network=mainnet --log-level info --input-file-json input-data/update-message-ethereum-mainnet.json`
+`npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=mainnet --log-level info --input-file-json input-data/update-message-ethereum-mainnet.json`
 
 Print the new message stored in the contract:  
-`node scripts/hello-world-get-message.js --network=mainnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=mainnet --log-level info`
 
 Example output:
 
 ![](images/walkthrough_ethereum_mainnet.png)
 
-Note: After seeing the estimated fees, I set `MAX_FEE_PER_TRANSACTION_USD` in `.env` to be `"20.00"`.
+Note: After seeing the estimated fees, I set `MAX_FEE_PER_TRANSACTION_USD` in `user-config.env` to be `"20.00"`.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -539,9 +540,9 @@ npx hardhat verify --network sepolia $SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS 
 Example output:
 
 ```bash
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS="0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1"
+stjohn@judgement:~/work/contract-template$ SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS="0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1"
 
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ npx hardhat verify --network sepolia $SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
+stjohn@judgement:~/work/contract-template$ npx hardhat verify --network sepolia $SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
 Successfully submitted source code for contract
 contracts/HelloWorld.sol:HelloWorld at 0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1
 for verification on the block explorer. Waiting for verification result...
@@ -572,9 +573,9 @@ npx hardhat verify --network mainnet $ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS "H
 Example output:
 
 ```bash
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0x50590A974646d333A93F89a37aBd2d2708671eAA"
+stjohn@judgement:~/work/contract-template$ ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0x50590A974646d333A93F89a37aBd2d2708671eAA"
 
-stjohn@judgement:~/work/eth-contract-hello-world-javascript$ npx hardhat verify --network mainnet $ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
+stjohn@judgement:~/work/contract-template$ npx hardhat verify --network mainnet $ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
 Successfully submitted source code for contract
 contracts/HelloWorld.sol:HelloWorld at 0x50590A974646d333A93F89a37aBd2d2708671eAA
 for verification on the block explorer. Waiting for verification result...
@@ -646,7 +647,7 @@ Distributed under the GNU Affero General Public License (AGPL). See `LICENSE.txt
 
 
 Project Link:
-[https://github.com/sj-piano/eth-contract-hello-world-javascript](https://github.com/sj-piano/eth-contract-hello-world-javascript)
+[https://github.com/sj-piano/ethereum-smart-contract-project-template-typescript](https://github.com/sj-piano/ethereum-smart-contract-project-template-typescript)
 
 
 **If you would like to:**
@@ -704,8 +705,8 @@ A list of helpful resources:
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[license-shield]: https://img.shields.io/github/license/sj-piano/eth-contract-hello-world-javascript.svg?style=for-the-badge
-[license-url]: https://github.com/sj-piano/eth-contract-hello-world-javascript/blob/main/LICENSE.txt
+[license-shield]: https://img.shields.io/github/license/sj-piano/ethereum-smart-contract-project-template-typescript?style=for-the-badge&color=32cb56
+[license-url]: https://github.com/sj-piano/ethereum-smart-contract-project-template-typescript/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-StJohn_Piano-blue.svg?style=for-the-badge&logo=linkedin
 [linkedin-url]: https://linkedin.com/in/stjohnpiano
 [tela-shield]: https://img.shields.io/badge/Tela-StJohn_Piano-blue?style=for-the-badge

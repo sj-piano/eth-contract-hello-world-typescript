@@ -5,15 +5,20 @@ const helpers = require("@nomicfoundation/hardhat-network-helpers");
 import { assert, expect, util } from "chai";
 import _ from "lodash";
 
-// Environment
-import "dotenv/config";
-
 // Local imports
 import amounts from "#src/amounts";
 import { config } from "#root/config";
 import ethereum from "#src/ethereum";
 import { createLogger } from "#root/lib/logging";
 import utils from "#root/lib/utils";
+
+// Environment variables
+import "dotenv/config";
+const {
+  MAX_FEE_PER_TRANSACTION_USD,
+  MAX_FEE_PER_GAS_GWEI,
+  MAX_PRIORITY_FEE_PER_GAS_GWEI,
+} = process.env;
 
 // Controls
 let logLevel = "error";
@@ -31,11 +36,6 @@ let hre = hardhat;
 let provider = hre.ethers.provider;
 let network = hre.network;
 const networkLabel = "local";
-const {
-  MAX_FEE_PER_TRANSACTION_USD,
-  MAX_FEE_PER_GAS_GWEI,
-  MAX_PRIORITY_FEE_PER_GAS_GWEI,
-} = process.env;
 config.update({
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,

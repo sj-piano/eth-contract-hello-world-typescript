@@ -40,6 +40,7 @@ program
     "specify the Ethereum network to connect to",
     "local"
   )
+  .option("--address <address>", "Ethereum address.")
   .option(
     "--address-file <addressFile>",
     "Path to file containing contract address."
@@ -47,7 +48,7 @@ program
 program.parse();
 const options = program.opts();
 if (options.debug) console.log(options);
-let { debug, logLevel, network: networkLabel, addressFile } = options;
+let { debug, logLevel, network: networkLabel, address, addressFile } = options;
 
 // Process and validate arguments
 
@@ -85,11 +86,29 @@ if (networkLabelResult.error) {
 }
 const network = config.mapNetworkLabelToNetwork[networkLabel];
 
-let contractAddress: string | undefined;
-if (fs.existsSync(addressFile)) {
-  contractAddress = fs.readFileSync(addressFile).toString().trim();
-  deb(`Address found in ${addressFile}: ${contractAddress}`);
+let contractAddress: string;
+if ((address && addressFile) || (!address && !addressFile)) {
+  console.error(
+    "Exactly one of the arguments '--address' or '--address-file' must be provided."
+  );
+  program.help(); // Display help and exit
 }
+if (addressFile && !fs.existsSync(addressFile)) {
+  var msg = `Address file not found: ${addressFile}`;
+  console.error(msg);
+  process.exit(1);
+}
+
+if (addressFile && fs.existsSync(addressFile)) {
+  address = fs.readFileSync(addressFile).toString().trim();
+  deb(`Address found in ${addressFile}: ${address}`);
+}
+if (!ethers.isAddress(address)) {
+  var msg = `Invalid Ethereum address: ${address}`;
+  console.error(msg);
+  process.exit(1);
+}
+contractAddress = address;
 
 // Setup
 
@@ -111,18 +130,22 @@ if (networkLabel == "local") {
   DEPLOYED_CONTRACT_ADDRESS = ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS;
 }
 log(msg);
-// Supplied contract file takes precedence over shell environment variable.
-if (contractAddress) {
-  DEPLOYED_CONTRACT_ADDRESS = contractAddress;
+// A supplied argument for the contract address overrides the shell environment variable.
+if (!address) {
+  if (!DEPLOYED_CONTRACT_ADDRESS) {
+    logger.error(`No contract address supplied and no default address found.`);
+    process.exit(1);
+  }
+  contractAddress = DEPLOYED_CONTRACT_ADDRESS;
 }
-if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
-  logger.error(`Invalid contract address: ${DEPLOYED_CONTRACT_ADDRESS}`);
+if (!ethers.isAddress(contractAddress)) {
+  logger.error(`Invalid contract address: ${contractAddress}`);
   process.exit(1);
 }
 
 // Run main function
 
-main()
+main({contractAddress})
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);
@@ -131,11 +154,11 @@ main()
 
 // Functions
 
-async function main() {
+async function main({contractAddress}: {contractAddress: string}) {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
-  let address = DEPLOYED_CONTRACT_ADDRESS!;
+  let address = contractAddress;
 
   let check = await ethereum.contractFoundAt({ provider, address });
   if (!check) {

@@ -52,6 +52,8 @@ npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-j
 
 npm run --silent ts-node scripts/check-contract-exists.ts -- --network testnet --address-file input-data/example-contract-address.txt
 
+npm run --silent ts-node scripts/check-contract-exists.ts -- --network mainnet --address 0x50590A974646d333A93F89a37aBd2d2708671eAA
+
 
 
 

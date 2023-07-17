@@ -1,7 +1,7 @@
 {
-  "name": "eth-contract-hello-world-typescript",
+  "name": "ethereum-smart-contract-project-template-typescript",
   "version": "1.0.0",
-  "description": "A complete 'Hello World' Ethereum smart contract package, written in Solidity and Typescript.",
+  "description": "A ready-for-production Ethereum smart contract project template, written in Solidity and Typescript.",
   "license": "AGPL-3.0-only",
   "main": "build/index.js",
   "scripts": {

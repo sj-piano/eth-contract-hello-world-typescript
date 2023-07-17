@@ -2,10 +2,14 @@
 # Example commands for the scripts.
 
 
-node scripts/check-network-connections.js --debug
+npm run --silent ts-node scripts/check-network-connections.ts -- --debug
 
 [by default, the network is 'local']
 npm run --silent ts-node scripts/get-network-fees.ts
+
+npm run --silent ts-node scripts/get-network-fees.ts -- --network testnet
+
+npm run --silent ts-node scripts/get-network-fees.ts -- --network mainnet
 
 node scripts/hello-world-deploy.js --network local
 

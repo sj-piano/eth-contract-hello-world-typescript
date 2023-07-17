@@ -10,7 +10,11 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Environment variables
-import "dotenv/config";
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const { INFURA_API_KEY_NAME } = process.env;
 
 // Logging

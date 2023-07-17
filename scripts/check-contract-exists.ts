@@ -16,11 +16,12 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Environment variables
-import "dotenv/config";
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const {
-  MAX_FEE_PER_TRANSACTION_USD,
-  MAX_FEE_PER_GAS_GWEI,
-  MAX_PRIORITY_FEE_PER_GAS_GWEI,
   INFURA_API_KEY_NAME,
   LOCAL_HARDHAT_DEPLOYED_CONTRACT_ADDRESS,
   SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS,
@@ -58,12 +59,6 @@ ethereum.validateAddressesSync({
   },
 });
 
-config.update({
-  MAX_FEE_PER_TRANSACTION_USD,
-  MAX_FEE_PER_GAS_GWEI,
-  MAX_PRIORITY_FEE_PER_GAS_GWEI,
-});
-
 const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
@@ -90,7 +85,7 @@ if (networkLabelResult.error) {
 }
 const network = config.mapNetworkLabelToNetwork[networkLabel];
 
-let contractAddress;
+let contractAddress: string | undefined;
 if (fs.existsSync(addressFile)) {
   contractAddress = fs.readFileSync(addressFile).toString().trim();
   deb(`Address found in ${addressFile}: ${contractAddress}`);

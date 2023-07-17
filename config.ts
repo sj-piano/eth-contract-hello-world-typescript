@@ -29,6 +29,7 @@ class Config {
   ETH_DP: number;
   USD_DP: number;
   dummyAddress: string;
+  envFileName: string;
 
   constructor() {
     // Note: maxFeePerTransactionUsd overrides the other fee limits.
@@ -54,6 +55,7 @@ class Config {
     this.ETH_DP = 18;
     this.USD_DP = 2;
     this.dummyAddress = "0x000000000000000000000000000000000000dEaD";
+    this.envFileName = "user-config.env";
   }
 
   // Setters

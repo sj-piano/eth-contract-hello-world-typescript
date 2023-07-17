@@ -1,20 +1,24 @@
 // Imports
-const Big = require("big.js");
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const Joi = require("joi");
-const _ = require("lodash");
+import Big from "big.js";
+import { program } from "commander";
+import { ethers } from "ethers";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
 // Controls
 const initialMessage = "Hello World!";
 
 // Load environment variables
-require("dotenv").config();
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const {
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,
@@ -98,23 +102,26 @@ const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
-let provider, signer;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
+let DEPLOYER_PRIVATE_KEY: string | undefined;
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
-  signer = new ethers.Wallet(LOCAL_HARDHAT_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = LOCAL_HARDHAT_PRIVATE_KEY;
 } else if (networkLabel == "testnet") {
   msg = `Connecting to Sepolia testnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
-  signer = new ethers.Wallet(SEPOLIA_TESTNET_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = SEPOLIA_TESTNET_PRIVATE_KEY;
 } else if (networkLabel == "mainnet") {
   msg = `Connecting to Ethereum mainnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
-  signer = new ethers.Wallet(ETHEREUM_MAINNET_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = ETHEREUM_MAINNET_PRIVATE_KEY;
 }
 log(msg);
+DEPLOYER_PRIVATE_KEY = DEPLOYER_PRIVATE_KEY!;
+let signer = new ethers.Wallet(DEPLOYER_PRIVATE_KEY, provider!);
 let contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,
@@ -135,12 +142,10 @@ main()
 async function main() {
   // Estimate fees.
   // - Stop if any fee limit is exceeded.
-  const txRequest = await contractFactoryHelloWorld.getDeployTransaction(
+  let txRequest = await contractFactoryHelloWorld.getDeployTransaction(
     initialMessage
   );
   const estimatedFees = await ethereum.estimateFees({
-    config,
-    logger,
     provider,
     txRequest,
   });
@@ -194,13 +199,23 @@ async function main() {
   await contractHelloWorld.waitForDeployment();
 
   // Examine the results and find out how much was spent.
-  const txDeployment = contractHelloWorld.deploymentTransaction();
+  let txDeployment = contractHelloWorld.deploymentTransaction();
   deb(txDeployment);
-  const txReceipt = await txDeployment.wait();
+  if (!txDeployment) {
+    let msg = `Deployment transaction not found.`;
+    console.error(msg);
+    process.exit(1);
+  }
+  let txReceipt = await txDeployment.wait();
   deb(txReceipt);
-  const { gasUsed, gasPrice: effectiveGasPrice } = txReceipt;
-  deb(`Gas used: ${gasUsed} wei`);
-  deb(`Effective gas price: ${effectiveGasPrice} wei`);
+  if (!txReceipt) {
+    let msg = `Deployment transaction receipt not found.`;
+    console.error(msg);
+    process.exit(1);
+  }
+  const { gasUsed, gasPrice: effectiveGasPriceWei } = txReceipt;
+  deb(`Gas used: ${gasUsed}`);
+  deb(`Effective gas price (wei): ${effectiveGasPriceWei}`);
 
   const txFeeWei = txReceipt.fee;
   deb(`txFeeWei: ${txFeeWei}`);

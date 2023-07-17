@@ -87,11 +87,15 @@ function validateAddressSync({
   address,
   name,
 }: {
-  address: string;
+  address: string | undefined;
   name?: string;
 }) {
+  let nameSection = !_.isUndefined(name) ? `${name} ` : "";
+  if (_.isUndefined(address)) {
+    let msg = `Address ${nameSection}("${address}") is undefined.`;
+    throw new Error(msg);
+  }
   if (!ethers.isAddress(address)) {
-    let nameSection = !_.isUndefined(name) ? `${name} ` : "";
     let msg = `Address ${nameSection}("${address}") is invalid.`;
     throw new Error(msg);
   }
@@ -101,16 +105,8 @@ function validateAddressSync({
 function validateAddressesSync({
   addresses,
 }: {
-  addresses: Record<string, string>;
+  addresses: Record<string, string | undefined>;
 }) {
-  if (_.isArray(addresses)) {
-    throw new Error(
-      `Addresses "${addresses}" must be an object, not an array.`
-    );
-  }
-  if (!_.isObject(addresses)) {
-    throw new Error(`Addresses "${addresses}" must be an object.`);
-  }
   if (!_.keys(addresses).length) {
     throw new Error(`Addresses "${addresses}" must not be empty.`);
   }

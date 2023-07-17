@@ -87,26 +87,27 @@ if (networkLabelResult.error) {
 const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 let contractAddress: string;
-if ((address && addressFile) || (!address && !addressFile)) {
-  console.error(
-    "Exactly one of the arguments '--address' or '--address-file' must be provided."
-  );
-  program.help(); // Display help and exit
-}
-if (addressFile && !fs.existsSync(addressFile)) {
-  var msg = `Address file not found: ${addressFile}`;
-  console.error(msg);
-  process.exit(1);
-}
-
-if (addressFile && fs.existsSync(addressFile)) {
-  address = fs.readFileSync(addressFile).toString().trim();
-  deb(`Address found in ${addressFile}: ${address}`);
-}
-if (!ethers.isAddress(address)) {
-  var msg = `Invalid Ethereum address: ${address}`;
-  console.error(msg);
-  process.exit(1);
+if (address || addressFile) {
+  if ((address && addressFile) || (!address && !addressFile)) {
+    console.error(
+      "Only one of the arguments '--address' or '--address-file' can be provided."
+    );
+    program.help(); // Display help and exit
+  }
+  if (addressFile && !fs.existsSync(addressFile)) {
+    var msg = `Address file not found: ${addressFile}`;
+    console.error(msg);
+    process.exit(1);
+  }
+  if (addressFile && fs.existsSync(addressFile)) {
+    address = fs.readFileSync(addressFile).toString().trim();
+    deb(`Address found in ${addressFile}: ${address}`);
+  }
+  if (!ethers.isAddress(address)) {
+    var msg = `Invalid Ethereum address: ${address}`;
+    console.error(msg);
+    process.exit(1);
+  }
 }
 contractAddress = address;
 

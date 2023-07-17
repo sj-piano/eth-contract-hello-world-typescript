@@ -103,12 +103,9 @@ if (networkLabel == "local") {
   msg = `Connecting to Ethereum mainnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
   DEPLOYED_CONTRACT_ADDRESS = ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS;
-} else {
-  msg = `Invalid network: ${networkLabel}`;
-  console.error(msg);
-  process.exit(1);
 }
 log(msg);
+provider = provider!;
 const contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,

@@ -58,15 +58,21 @@ npm run --silent ts-node scripts/check-contract-exists.ts -- --network testnet -
 # Create a new Ethereum keypair and get its balance.
 
 
-node scripts/create-private-key.js > input-data/example-private-key.txt
+npm run --silent ts-node scripts/create-private-key.ts > input-data/example-private-key.txt
 
 cat input-data/example-private-key.txt
 
-cat input-data/example-private-key.txt | node scripts/derive-address.js > input-data/example-address.txt
+
+cat input-data/example-private-key.txt | npm run --silent ts-node scripts/derive-address.ts > input-data/example-address.txt
 
 cat input-data/example-address.txt
 
-node scripts/get-balance.js --address-file input-data/example-address.txt
 
-node scripts/get-balance.js --address 0x3bEC26B3cC2a1B0b123e9044E4D0085EfE9bF526
+npm run --silent ts-node scripts/get-balance.ts -- --address-file input-data/example-address.txt
+
+npm run --silent ts-node scripts/get-balance.ts -- --address 0x3bEC26B3cC2a1B0b123e9044E4D0085EfE9bF526
+
+npm run --silent ts-node scripts/get-balance.ts -- --address 0x3bEC26B3cC2a1B0b123e9044E4D0085EfE9bF526 --network testnet
+
+npm run --silent ts-node scripts/get-balance.ts -- --address 0x3bEC26B3cC2a1B0b123e9044E4D0085EfE9bF526 --network mainnet
 

@@ -1,19 +1,23 @@
 // Imports
-const Ajv = require("ajv");
-const Big = require("big.js");
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const fs = require("fs");
-const Joi = require("joi");
-const _ = require("lodash");
+import Ajv from "ajv";
+import Big from "big.js";
+import { program } from "commander";
+import { ethers } from "ethers";
+import fs from "fs";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
 // Load environment variables
-require("dotenv").config();
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const {
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,
@@ -107,7 +111,7 @@ if (!fs.existsSync(inputFileJson)) {
   console.error(`File "${inputFileJson}" not found.`);
   process.exit(1);
 }
-const inputData = JSON.parse(fs.readFileSync(inputFileJson));
+let inputData = JSON.parse(fs.readFileSync(inputFileJson).toString());
 
 const ajv = new Ajv();
 const inputJsonSchema = {
@@ -124,32 +128,37 @@ if (!validInputData) {
   console.error(validateInputJson.errors);
   process.exit(1);
 }
-let { newMessage } = inputData;
+let { newMessage }: {newMessage: string} = inputData;
 
 // Setup
 
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
-let provider, signer;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
+let DEPLOYER_PRIVATE_KEY: string | undefined;
+let DEPLOYED_CONTRACT_ADDRESS: string | undefined;
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
-  signer = new ethers.Wallet(LOCAL_HARDHAT_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = LOCAL_HARDHAT_PRIVATE_KEY;
   DEPLOYED_CONTRACT_ADDRESS = LOCAL_HARDHAT_DEPLOYED_CONTRACT_ADDRESS;
 } else if (networkLabel == "testnet") {
   msg = `Connecting to Sepolia testnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
-  signer = new ethers.Wallet(SEPOLIA_TESTNET_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = SEPOLIA_TESTNET_PRIVATE_KEY;
   DEPLOYED_CONTRACT_ADDRESS = SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS;
 } else if (networkLabel == "mainnet") {
   msg = `Connecting to Ethereum mainnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
-  signer = new ethers.Wallet(ETHEREUM_MAINNET_PRIVATE_KEY, provider);
+  DEPLOYER_PRIVATE_KEY = ETHEREUM_MAINNET_PRIVATE_KEY;
   DEPLOYED_CONTRACT_ADDRESS = ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS;
 }
 log(msg);
+provider = provider!;
+DEPLOYER_PRIVATE_KEY = DEPLOYER_PRIVATE_KEY!;
+let signer = new ethers.Wallet(DEPLOYER_PRIVATE_KEY, provider);
 if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
   logger.error(`Invalid contract address: ${DEPLOYED_CONTRACT_ADDRESS}`);
   process.exit(1);
@@ -171,12 +180,12 @@ main({ newMessage })
 
 // Functions
 
-async function main({ newMessage }) {
+async function main({ newMessage }: {newMessage: string}) {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
-  let address = contractHelloWorld.target;
-  let check = await ethereum.contractFoundAt({ logger, provider, address });
+  let address = await contractHelloWorld.getAddress();
+  let check = await ethereum.contractFoundAt({ provider, address });
   if (!check) {
     logger.error(`No contract found at address ${address}.`);
     process.exit(1);
@@ -187,7 +196,7 @@ async function main({ newMessage }) {
   await updateMessage({ newMessage });
 }
 
-async function updateMessage({ newMessage }) {
+async function updateMessage({ newMessage }: {newMessage: string}) {
   const message = await contractHelloWorld.message();
   log("Message stored in HelloWorld contract: " + message);
 
@@ -197,8 +206,6 @@ async function updateMessage({ newMessage }) {
     newMessage
   );
   const estimatedFees = await ethereum.estimateFees({
-    config,
-    logger,
     provider,
     txRequest,
   });
@@ -250,12 +257,13 @@ async function updateMessage({ newMessage }) {
     });
   } catch (error) {
     logger.error(error);
-    let errorName = error.code; // e.g. UNKNOWN_ERROR
-    let errorCode = error.error.code; // e.g. -32000
-    let errorMessage = error.error.message;
-    // Example errorMessage: Transaction maxFeePerGas (200000000) is too low for the next block, which has a baseFeePerGas of 264952691
-    let errorStackTrace = error.stack;
-    //logger.error(errorStackTrace);
+    if (error instanceof Error) {
+      let errorName = error.code; // e.g. UNKNOWN_ERROR
+      let errorMessage = error.message;
+      // Example errorMessage: Transaction maxFeePerGas (200000000) is too low for the next block, which has a baseFeePerGas of 264952691
+      let errorStackTrace = error.stack;
+      //logger.error(errorStackTrace);
+    }
   }
 
   deb(tx);

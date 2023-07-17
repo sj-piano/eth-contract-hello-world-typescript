@@ -4,19 +4,19 @@
 */
 
 // Imports
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const fs = require("fs");
-const Joi = require("joi");
-const _ = require("lodash");
+import { program } from "commander";
+import { ethers } from "ethers";
+import fs from "fs";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
-// Load environment variables
-require("dotenv").config();
+// Environment variables
+import "dotenv/config";
 const {
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,
@@ -77,6 +77,7 @@ if (debug) {
   logLevel = "debug";
 }
 logger.setLevel({ logLevel });
+ethereum.setLogLevel({ logLevel });
 
 const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
@@ -91,15 +92,16 @@ const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 let contractAddress;
 if (fs.existsSync(addressFile)) {
-  let contractAddress = fs.readFileSync(addressFile).toString().trim();
+  contractAddress = fs.readFileSync(addressFile).toString().trim();
   deb(`Address found in ${addressFile}: ${contractAddress}`);
 }
 
 // Setup
 
-let provider;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
+let DEPLOYED_CONTRACT_ADDRESS: string | undefined;
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
@@ -138,11 +140,11 @@ async function main() {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
-  let address = DEPLOYED_CONTRACT_ADDRESS;
+  let address = DEPLOYED_CONTRACT_ADDRESS!;
 
-  let check = await ethereum.contractFoundAt({ logger, provider, address });
+  let check = await ethereum.contractFoundAt({ provider, address });
   if (!check) {
-    logger.error(`No contract found at address: ${address}`);
+    console.error(`No contract found at address: ${address}`);
     process.exit(1);
   }
   console.log(`Contract found at address: ${address}`);

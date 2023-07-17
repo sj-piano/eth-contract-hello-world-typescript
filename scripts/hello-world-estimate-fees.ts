@@ -1,16 +1,20 @@
 // Imports
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const Joi = require("joi");
-const _ = require("lodash");
+import { program } from "commander";
+import { ethers } from "ethers";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
-// Load environment variables
-require("dotenv").config();
+// Environment variables
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const {
   MAX_FEE_PER_TRANSACTION_USD,
   MAX_FEE_PER_GAS_GWEI,
@@ -83,9 +87,10 @@ const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
 
-let provider, signer;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
+let DEPLOYED_CONTRACT_ADDRESS: string | undefined;
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
@@ -98,12 +103,16 @@ if (networkLabel == "local") {
   msg = `Connecting to Ethereum mainnet...`;
   provider = new ethers.InfuraProvider(network, INFURA_API_KEY_NAME);
   DEPLOYED_CONTRACT_ADDRESS = ETHEREUM_MAINNET_DEPLOYED_CONTRACT_ADDRESS;
+} else {
+  msg = `Invalid network: ${networkLabel}`;
+  console.error(msg);
+  process.exit(1);
 }
 log(msg);
 const contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,
-  provider
+  provider,
 );
 if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
   log(`Invalid contract address: ${DEPLOYED_CONTRACT_ADDRESS}`);
@@ -113,7 +122,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  signer
+  provider,
 );
 
 // Run main function
@@ -137,8 +146,6 @@ async function main() {
     initialMessage
   );
   const estimatedFees = await ethereum.estimateFees({
-    config,
-    logger,
     provider,
     txRequest,
   });
@@ -155,8 +162,8 @@ async function main() {
   }
 
   // Check if contract exists at address
-  let address = contractHelloWorld.target;
-  let check = await ethereum.contractFoundAt({ logger, provider, address });
+  let address = await contractHelloWorld.getAddress();
+  let check = await ethereum.contractFoundAt({ provider, address });
   if (!check) {
     console.log(`\nNo contract found at address ${address}.`);
   }
@@ -168,8 +175,6 @@ async function main() {
     newMessage
   );
   const estimatedFees2 = await ethereum.estimateFees({
-    config,
-    logger,
     provider,
     txRequest: txRequest2,
   });

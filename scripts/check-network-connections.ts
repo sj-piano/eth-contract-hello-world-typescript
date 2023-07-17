@@ -1,15 +1,21 @@
 // Imports
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const Joi = require("joi");
-const _ = require("lodash");
+import { program } from "commander";
+import { ethers } from "ethers";
+import fs from "fs";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
-// Load environment variables
-require("dotenv").config();
+// Environment variables
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const { INFURA_API_KEY_NAME } = process.env;
 
 // Logging

@@ -167,6 +167,10 @@ async function getGasPrices({ provider }: { provider: Provider }) {
     averagePriorityFeePerGasWei,
     "ether"
   );
+  const basicPaymentCostEth = ethers.formatUnits(
+    (BigInt(gasPriceWei) + BigInt(averagePriorityFeePerGasWei)) * 21000n,
+    "ether"
+  );
   return {
     blockNumber,
     baseFeePerGasWei,
@@ -179,6 +183,7 @@ async function getGasPrices({ provider }: { provider: Provider }) {
     gasPriceEth,
     averagePriorityFeePerGasGwei,
     averagePriorityFeePerGasEth,
+    basicPaymentCostEth,
   };
 }
 
@@ -206,12 +211,16 @@ async function getGasPricesWithFiat({ provider }: { provider: Provider }) {
   const averagePriorityFeePerGasUsd = Big(gasPrices.averagePriorityFeePerGasEth)
     .mul(Big(ethToUsd))
     .toFixed(config.ETH_DP);
+  const basicPaymentCostUsd = Big(gasPrices.basicPaymentCostEth)
+    .mul(Big(ethToUsd))
+    .toFixed(config.USD_DP);
   return {
     ...gasPrices,
     ethToUsd,
     baseFeePerGasUsd,
     gasPriceUsd,
     averagePriorityFeePerGasUsd,
+    basicPaymentCostUsd,
   };
 }
 

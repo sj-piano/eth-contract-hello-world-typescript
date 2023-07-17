@@ -7,13 +7,21 @@ npm run --silent ts-node scripts/check-network-connections.ts -- --debug
 [by default, the network is 'local']
 npm run --silent ts-node scripts/get-network-fees.ts
 
+npm run --silent ts-node scripts/get-network-fees.ts -- --network local
+
 npm run --silent ts-node scripts/get-network-fees.ts -- --network testnet
 
 npm run --silent ts-node scripts/get-network-fees.ts -- --network mainnet
 
-node scripts/hello-world-deploy.js --network local
+npm run --silent ts-node scripts/hello-world-estimate-fees.ts
 
-node scripts/hello-world-deploy.js --network testnet
+npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network testnet
+
+npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network mainnet
+
+npm run --silent ts-node scripts/hello-world-deploy.ts
+
+npm run --silent ts-node scripts/hello-world-deploy.ts -- --network testnet
 
 npm run --silent ts-node scripts/check-contract-exists.ts
 
@@ -22,12 +30,6 @@ npm run --silent ts-node scripts/check-contract-exists.ts -- --network testnet -
 node scripts/hello-world-get-message.js
 
 node scripts/hello-world-update-message.js --input-file-json input-data/example-input-data-update-message.json --debug
-
-node scripts/hello-world-estimate-fees.js
-
-node scripts/hello-world-estimate-fees.js --network testnet
-
-node scripts/hello-world-estimate-fees.js --network mainnet
 
 node scripts/check-contract-exists.js --network local
 

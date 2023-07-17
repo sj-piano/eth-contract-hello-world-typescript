@@ -1,18 +1,22 @@
 // Imports
-const Big = require("big.js");
-const { program } = require("commander");
-const { ethers } = require("ethers");
-const fs = require("fs");
-const Joi = require("joi");
-const _ = require("lodash");
+import Big from "big.js";
+import { program } from "commander";
+import { ethers } from "ethers";
+import fs from "fs";
+import Joi from "joi";
+import _ from "lodash";
 
 // Local imports
-const { config } = require("#root/config.js");
-const ethereum = require("#root/src/ethereum.js");
-const { createLogger } = require("#root/lib/logging.js");
+import { config } from "#root/config";
+import ethereum from "#root/src/ethereum";
+import { createLogger } from "#root/lib/logging";
 
-// Load environment variables
-require("dotenv").config();
+// Environment variables
+import dotenv from 'dotenv';
+import path from 'path';
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+let envFile = path.join(rootDir, config.envFileName);
+dotenv.config({ path: envFile });
 const { INFURA_API_KEY_NAME } = process.env;
 
 // Logging
@@ -66,7 +70,7 @@ const network = config.mapNetworkLabelToNetwork[networkLabel];
 
 if ((address && addressFile) || (!address && !addressFile)) {
   console.error(
-    "Please provide either '--address' or '--address-file', but not both."
+    "Exactly one of the arguments '--address' or '--address-file' must be provided."
   );
   program.help(); // Display help and exit
 }
@@ -88,9 +92,9 @@ if (!ethers.isAddress(address)) {
 
 // Setup
 
-let provider;
+let provider: ethers.Provider;
 
-var msg;
+var msg: string = "Unknown error";
 if (networkLabel == "local") {
   msg = `Connecting to local network at ${network}...`;
   provider = new ethers.JsonRpcProvider(network);
@@ -120,8 +124,8 @@ async function main() {
 
   let balanceWei = await provider.getBalance(address);
   let balanceEth = ethers.formatEther(balanceWei);
-  let ethToUsd = await ethereum.getEthereumPriceInUsd({ logger, config });
-  let balanceUsd = (Big(balanceEth) * Big(ethToUsd)).toFixed(config.USD_DP);
+  let ethToUsd = await ethereum.getEthereumPriceInUsd();
+  let balanceUsd = (Big(balanceEth).mul(Big(ethToUsd))).toFixed(config.USD_DP);
 
   let msg = `${balanceEth} ETH (${balanceUsd} USD)`;
   console.log(msg);

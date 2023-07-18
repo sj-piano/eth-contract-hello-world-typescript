@@ -1,6 +1,7 @@
 // Imports
 import hardhat, { ethers } from "hardhat";
-//import helpers from "@nomicfoundation/hardhat-network-helpers";
+//import helpers from "@nomicfoundation/hardhat-network-helpers"; // This doesn't work.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const helpers = require("@nomicfoundation/hardhat-network-helpers");
 import { assert, expect, util } from "chai";
 import _ from "lodash";

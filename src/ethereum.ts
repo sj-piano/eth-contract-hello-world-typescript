@@ -459,7 +459,7 @@ async function signAndSendTransaction({
   networkLabel: string;
   provider: Provider;
   senderAddress: string;
-  txRequest: any;
+  txRequest: TransactionRequest;
 }) {
   let txSigned = await security.signTransaction({
     networkLabel,

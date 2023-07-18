@@ -132,7 +132,7 @@ let { newMessage }: { newMessage: string } = inputData;
 
 // Setup
 
-const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
+import contract from "../artifacts/contracts/HelloWorld.sol/HelloWorld.json";
 
 let provider: ethers.Provider;
 

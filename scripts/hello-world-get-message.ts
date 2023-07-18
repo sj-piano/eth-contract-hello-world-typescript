@@ -96,7 +96,7 @@ if (fs.existsSync(addressFile)) {
 
 // Setup
 
-const contract = require("../artifacts/contracts/HelloWorld.sol/HelloWorld.json");
+import contract from "../artifacts/contracts/HelloWorld.sol/HelloWorld.json";
 
 let provider: ethers.Provider;
 

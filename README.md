@@ -144,7 +144,7 @@ You can read the contract's stored data at:
 - Ethereum development environment: [`hardhat`](https://hardhat.org)
 - Decimal arithmetic: [`big.ts`](https://mikemcl.github.io/big.ts)
 - Test assertion: [`chai`](https://www.chaijs.com)
-- Javascript formatter: [`prettier-standard`](https://github.com/sheerun/prettier-standard)
+- Javascript formatter: [`prettier`](https://prettier.io)
 - CLI interface: [`commander`](https://github.com/tj/commander.ts)
 - Logging: [`winston`](https://github.com/winstonjs/winston)
 - Data validation: [`joi`](https://github.com/hapijs/joi)

@@ -35,13 +35,13 @@ tasks:
   check-js-formatting:
     desc: "Check the formatting of the Javascript code"
     cmds:
-      - npx prettier . --check
+      - npx prettier --config .prettierrc './**/*.ts' --check
     silent: true
 
   fix-js-formatting:
     desc: "Reformat the Javascript code"
     cmds:
-      - npx prettier . --write
+      - npx prettier --config .prettierrc './**/*.ts' --write
     silent: true
 
   start-local-node:

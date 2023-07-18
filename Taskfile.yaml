@@ -44,6 +44,12 @@ tasks:
       - npx prettier --config .prettierrc './**/*.ts' --write
     silent: true
 
+  lint:
+    desc: "Lint the Javascript code"
+    cmds:
+      - npx eslint './**/*.ts'
+    silent: true
+
   start-local-node:
     desc: "Start a local Hardhat node"
     cmds:

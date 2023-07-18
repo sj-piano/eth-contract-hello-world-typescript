@@ -32,14 +32,14 @@ const { logger, log, deb } = createLogger({ fileName: __filename, logLevel });
 // Functions
 
 async function signTransaction({
+  networkLabel,
   provider,
   senderAddress,
-  networkLabel,
   txRequest,
 }: {
+  networkLabel: string;
   provider: Provider;
   senderAddress: string;
-  networkLabel: string;
   txRequest: TransactionRequest;
 }) {
   let privateKey = "";

@@ -4,6 +4,7 @@
 
 import { ethers } from "ethers";
 import {
+  DeployContractOptions,
   FactoryOptions,
   HardhatEthersHelpers as HardhatEthersHelpersBase,
 } from "@nomicfoundation/hardhat-ethers/types";
@@ -25,13 +26,13 @@ declare module "hardhat/types/runtime" {
 
     deployContract(
       name: "HelloWorld",
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.HelloWorld>;
 
     deployContract(
       name: "HelloWorld",
       args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.HelloWorld>;
 
     // default types
@@ -51,12 +52,12 @@ declare module "hardhat/types/runtime" {
     ): Promise<ethers.Contract>;
     deployContract(
       name: string,
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<ethers.Contract>;
     deployContract(
       name: string,
       args: any[],
-      signerOrOptions?: ethers.Signer | FactoryOptions
+      signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<ethers.Contract>;
   }
 }

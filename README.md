@@ -703,8 +703,8 @@ A list of helpful resources:
 * Ethereum Mainnet block explorer: [etherscan.io](https://etherscan.io)
 
 * Typescript Linting advice from Khalil Stemmler:  
-** [How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript)
-** [How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier)
+    * [How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript)
+    * [How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -153,7 +153,7 @@ You can read the contract's stored data at:
 
 **Plugins:**
 - [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier): Turns off all ESLint rules that have the potential to interfere with Prettier rules.
-- [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier): Turns Prettier rules into ESLint rules.
+- [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier): Turns Prettier rules into ESLint rules.
 
 Private keys are managed in a `user-config.env` file.
 

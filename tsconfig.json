@@ -18,10 +18,7 @@
     "target": "es2022"
   },
   "exclude": ["node_modules", "build"],
-  "files": [
-    "hardhat.config.ts",
-    "src/types/custom.d.ts",
-  ],
+  "files": ["hardhat.config.ts", "src/types/custom.d.ts"],
   "include": [
     "./*.ts",
     "./lib/**/*",

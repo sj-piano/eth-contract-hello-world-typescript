@@ -13,9 +13,9 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Load environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
 const {
@@ -128,7 +128,7 @@ if (!validInputData) {
   console.error(validateInputJson.errors);
   process.exit(1);
 }
-let { newMessage }: {newMessage: string} = inputData;
+let { newMessage }: { newMessage: string } = inputData;
 
 // Setup
 
@@ -180,7 +180,7 @@ main({ newMessage })
 
 // Functions
 
-async function main({ newMessage }: {newMessage: string}) {
+async function main({ newMessage }: { newMessage: string }) {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
@@ -196,7 +196,7 @@ async function main({ newMessage }: {newMessage: string}) {
   await updateMessage({ newMessage });
 }
 
-async function updateMessage({ newMessage }: {newMessage: string}) {
+async function updateMessage({ newMessage }: { newMessage: string }) {
   const message = await contractHelloWorld.message();
   log("Message stored in HelloWorld contract: " + message);
 

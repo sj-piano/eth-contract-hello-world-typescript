@@ -10,9 +10,9 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
 const {
@@ -109,7 +109,7 @@ provider = provider!;
 const contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,
-  provider,
+  provider
 );
 if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
   log(`Invalid contract address: ${DEPLOYED_CONTRACT_ADDRESS}`);
@@ -119,7 +119,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  provider,
+  provider
 );
 
 // Run main function

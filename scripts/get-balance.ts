@@ -12,9 +12,9 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
 const { INFURA_API_KEY_NAME } = process.env;
@@ -125,7 +125,7 @@ async function main() {
   let balanceWei = await provider.getBalance(address);
   let balanceEth = ethers.formatEther(balanceWei);
   let ethToUsd = await ethereum.getEthereumPriceInUsd();
-  let balanceUsd = (Big(balanceEth).mul(Big(ethToUsd))).toFixed(config.USD_DP);
+  let balanceUsd = Big(balanceEth).mul(Big(ethToUsd)).toFixed(config.USD_DP);
 
   let msg = `${balanceEth} ETH (${balanceUsd} USD)`;
   console.log(msg);

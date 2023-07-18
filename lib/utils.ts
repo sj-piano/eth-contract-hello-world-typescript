@@ -2,12 +2,12 @@
 - This file cannot import config.ts, because config.ts imports utils.ts.
 */
 
-function getEnvVar({name} : {name: string}) {
+function getEnvVar({ name }: { name: string }) {
   let value = process.env[name];
   if (!value) {
     throw new Error(`Environment variable "${name}" is not defined`);
   }
-  return {[name]: value};
+  return { [name]: value };
 }
 
 function getMethods(obj: any): string[] {

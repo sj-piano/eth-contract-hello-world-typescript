@@ -14,9 +14,9 @@ import { createLogger } from "#root/lib/logging";
 const initialMessage = "Hello World!";
 
 // Load environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
 const {

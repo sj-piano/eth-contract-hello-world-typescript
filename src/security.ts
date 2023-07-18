@@ -14,12 +14,14 @@ import { createLogger } from "#root/lib/logging";
 import utils from "#root/lib/utils";
 
 // Environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
-const { LOCAL_HARDHAT_MNEMONIC_PHRASE } = utils.getEnvVar({name: "LOCAL_HARDHAT_MNEMONIC_PHRASE"});
+const { LOCAL_HARDHAT_MNEMONIC_PHRASE } = utils.getEnvVar({
+  name: "LOCAL_HARDHAT_MNEMONIC_PHRASE",
+});
 
 // Controls
 let logLevel = "error";
@@ -27,7 +29,6 @@ logLevel = "info";
 
 // Logging
 const { logger, log, deb } = createLogger({ fileName: __filename, logLevel });
-
 
 // Functions
 
@@ -52,7 +53,7 @@ async function signTransaction({
     while (!found && index < 20) {
       const wallet = ethers.HDNodeWallet.fromMnemonic(
         mnemonic,
-        derivationPath + `/${index}`,
+        derivationPath + `/${index}`
       );
       if (wallet.address == senderAddress) {
         found = true;

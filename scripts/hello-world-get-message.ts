@@ -11,9 +11,9 @@ import ethereum from "#root/src/ethereum";
 import { createLogger } from "#root/lib/logging";
 
 // Load environment variables
-import dotenv from 'dotenv';
-import path from 'path';
-let rootDir = __dirname.substring(0, __dirname.lastIndexOf('/'));
+import dotenv from "dotenv";
+import path from "path";
+let rootDir = __dirname.substring(0, __dirname.lastIndexOf("/"));
 let envFile = path.join(rootDir, config.envFileName);
 dotenv.config({ path: envFile });
 const {
@@ -128,7 +128,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  provider,
+  provider
 );
 
 // Run main function

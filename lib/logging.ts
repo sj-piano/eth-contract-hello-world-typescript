@@ -20,7 +20,7 @@ class Logger {
       fileName: "",
       logLevel: "error",
       timestamp: false,
-    }
+    },
   ) {
     if (fileName) {
       fileName = fileName.replace(process.cwd() + "/", "");
@@ -47,7 +47,7 @@ class Logger {
           format: "YYYY-MM-DD HH:mm:ss.SSS",
         }),
         align(),
-        printf(logFormat)
+        printf(logFormat),
       ),
       transports: [new winston.transports.Console()],
     });
@@ -58,7 +58,7 @@ class Logger {
     let logLevelResult = logLevelSchema.validate(logLevel);
     if (logLevelResult.error) {
       let msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-        ", "
+        ", ",
       )}]`;
       throw new Error(msg);
     }

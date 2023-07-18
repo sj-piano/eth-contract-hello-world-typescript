@@ -44,11 +44,11 @@ program
   .option(
     "--network <network>",
     "specify the Ethereum network to connect to",
-    "local"
+    "local",
   )
   .requiredOption(
     "--input-file-json <inputFileJson>",
-    "Path to JSON file containing input data."
+    "Path to JSON file containing input data.",
   );
 program.parse();
 const options = program.opts();
@@ -86,7 +86,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -100,7 +100,7 @@ const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
 if (networkLabelResult.error) {
   var msg = `Invalid network "${networkLabel}". Valid options are: [${config.networkLabelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -166,7 +166,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  signer
+  signer,
 );
 
 // Run main function
@@ -203,7 +203,7 @@ async function updateMessage({ newMessage }: { newMessage: string }) {
   // Estimate fees.
   // - Stop if any fee limit is exceeded.
   const txRequest = await contractHelloWorld.update.populateTransaction(
-    newMessage
+    newMessage,
   );
   const estimatedFees = await ethereum.estimateFees({
     provider,
@@ -240,7 +240,7 @@ async function updateMessage({ newMessage }: { newMessage: string }) {
   log(`Signer balance: ${signerBalanceEth} ETH (${signerBalanceUsd} USD)`);
   if (Big(signerBalanceEth).lt(Big(feeEth))) {
     console.error(
-      `Sender address (${signerAddress}) has a balance that is too low (${signerBalanceEth} ETH). At least ${feeEth} ETH is needed to pay for the deployment transaction.`
+      `Sender address (${signerAddress}) has a balance that is too low (${signerBalanceEth} ETH). At least ${feeEth} ETH is needed to pay for the deployment transaction.`,
     );
     process.exit(1);
   }

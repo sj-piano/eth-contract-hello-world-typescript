@@ -35,7 +35,7 @@ program
   .option(
     "--network <network>",
     "specify the Ethereum network to connect to",
-    "local"
+    "local",
   );
 program.parse();
 const options = program.opts();
@@ -62,7 +62,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -76,7 +76,7 @@ const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
 if (networkLabelResult.error) {
   var msg = `Invalid network "${networkLabel}". Valid options are: [${config.networkLabelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -109,7 +109,7 @@ provider = provider!;
 const contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,
-  provider
+  provider,
 );
 if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
   log(`Invalid contract address: ${DEPLOYED_CONTRACT_ADDRESS}`);
@@ -119,7 +119,7 @@ if (!ethers.isAddress(DEPLOYED_CONTRACT_ADDRESS)) {
 const contractHelloWorld = new ethers.Contract(
   DEPLOYED_CONTRACT_ADDRESS,
   contract.abi,
-  provider
+  provider,
 );
 
 // Run main function
@@ -140,7 +140,7 @@ async function main() {
   // Contract deployment
   const initialMessage = "Hello World!";
   const txRequest = await contractFactoryHelloWorld.getDeployTransaction(
-    initialMessage
+    initialMessage,
   );
   const estimatedFees = await ethereum.estimateFees({
     provider,
@@ -169,7 +169,7 @@ async function main() {
   // Contract method call: update
   const newMessage = "Hello World! Updated.";
   const txRequest2 = await contractHelloWorld.update.populateTransaction(
-    newMessage
+    newMessage,
   );
   const estimatedFees2 = await ethereum.estimateFees({
     provider,

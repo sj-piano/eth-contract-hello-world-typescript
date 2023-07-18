@@ -27,7 +27,7 @@ program
   .option(
     "--network <network>",
     "specify the Ethereum network to connect to",
-    "local"
+    "local",
   );
 program.parse();
 const options = program.opts();
@@ -40,7 +40,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -54,7 +54,7 @@ const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
 if (networkLabelResult.error) {
   let msg = `Invalid network "${networkLabel}". Valid options are: [${config.networkLabelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);

@@ -19,7 +19,7 @@ describe("HelloWorld contract", function () {
     const constructorArgs = [initialMessage];
     contractHelloWorld = await ethers.deployContract(
       "HelloWorld",
-      constructorArgs
+      constructorArgs,
     );
     return { contractHelloWorld, initialMessage, owner, addr1, addr2 };
   }
@@ -27,7 +27,7 @@ describe("HelloWorld contract", function () {
   describe("Deployment", function () {
     it("Should set the initial message supplied to the constructor", async function () {
       const { contractHelloWorld, initialMessage } = await loadFixture(
-        deployHelloWorldFixture
+        deployHelloWorldFixture,
       );
       const message = await contractHelloWorld.message();
       expect(message).to.equal(initialMessage);
@@ -37,7 +37,7 @@ describe("HelloWorld contract", function () {
   describe("Update", function () {
     it("Should update the message", async function () {
       const { contractHelloWorld, initialMessage } = await loadFixture(
-        deployHelloWorldFixture
+        deployHelloWorldFixture,
       );
       const newMessage = "New message.";
       await contractHelloWorld.update(newMessage);

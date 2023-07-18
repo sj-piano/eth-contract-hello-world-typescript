@@ -36,7 +36,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);

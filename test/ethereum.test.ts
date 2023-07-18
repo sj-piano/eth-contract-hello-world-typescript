@@ -70,7 +70,7 @@ describe("Ethereum private key", function () {
       const privateKey = "0x1234567890abcdef" + "zzzz";
       assert.throws(
         () => ethereum.validatePrivateKeySync({ privateKey }),
-        Error
+        Error,
       );
     });
 
@@ -78,7 +78,7 @@ describe("Ethereum private key", function () {
       const privateKey = "0x1234567890abcdef";
       assert.throws(
         () => ethereum.validatePrivateKeySync({ privateKey }),
-        Error
+        Error,
       );
     });
 
@@ -86,7 +86,7 @@ describe("Ethereum private key", function () {
       const privateKey = "0x" + "1234567890abcdef".repeat(4) + "1234";
       assert.throws(
         () => ethereum.validatePrivateKeySync({ privateKey }),
-        Error
+        Error,
       );
     });
   });

@@ -46,7 +46,7 @@ function privateKeyIsValidSync({
   }
   if (!ethers.isHexString(privateKey, 32)) {
     let msg = `Private key ${nameSection}("${privateKey}") is a hex string that it is ${ethers.dataLength(
-      privateKey
+      privateKey,
     )} bytes long. But: It should be 32 bytes long.`;
     return { valid: false, msg };
   }
@@ -166,15 +166,15 @@ async function getGasPrices({ provider }: { provider: Provider }) {
   const gasPriceEth = ethers.formatUnits(gasPriceWei, "ether");
   const averagePriorityFeePerGasGwei = ethers.formatUnits(
     averagePriorityFeePerGasWei,
-    "gwei"
+    "gwei",
   );
   const averagePriorityFeePerGasEth = ethers.formatUnits(
     averagePriorityFeePerGasWei,
-    "ether"
+    "ether",
   );
   const basicPaymentCostEth = ethers.formatUnits(
     (BigInt(gasPriceWei) + BigInt(averagePriorityFeePerGasWei)) * 21000n,
-    "ether"
+    "ether",
   );
   return {
     blockNumber,
@@ -299,7 +299,7 @@ async function estimateFees({
     let msg = `Max priority fee per gas (${maxPriorityFeePerGasWei} wei) exceeds limit specified in config (${config.maxPriorityFeePerGasWei} wei).`;
     msg += ` Using config limit instead.`;
     let comparatorWord = Big(averagePriorityFeePerGasWei).gt(
-      Big(config.maxPriorityFeePerGasWei)
+      Big(config.maxPriorityFeePerGasWei),
     )
       ? "greater"
       : "less";
@@ -343,7 +343,7 @@ async function estimateFees({
       .toString();
     let unusablePriorityFeeGwei = ethers.formatUnits(
       unusablePriorityFeeWei,
-      "gwei"
+      "gwei",
     );
     let msg2 = ` The transaction won't be able to use its entire priority fee. Unusable amount = (${unusablePriorityFeeGwei} Gwei, ${unusablePriorityFeeUsd} USD), out of total available = (${maxPriorityFeeGwei} gwei, ${maxPriorityFeeUsd} USD).`;
     msg += msg2;
@@ -408,7 +408,7 @@ async function sendEth({
   let nonce = await provider.getTransactionCount(senderAddress);
   let chainId = await provider.getNetwork().then((network) => network.chainId);
   deb(
-    `Sending ${amountEth} ETH from ${senderAddress} to ${receiverAddress} on network=${networkLabel} (chainId=${chainId})...`
+    `Sending ${amountEth} ETH from ${senderAddress} to ${receiverAddress} on network=${networkLabel} (chainId=${chainId})...`,
   );
   let basicPaymentGasLimit = "21000";
   let txRequest = {

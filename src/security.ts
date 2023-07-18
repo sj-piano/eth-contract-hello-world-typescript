@@ -53,7 +53,7 @@ async function signTransaction({
     while (!found && index < 20) {
       const wallet = ethers.HDNodeWallet.fromMnemonic(
         mnemonic,
-        derivationPath + `/${index}`
+        derivationPath + `/${index}`,
       );
       if (wallet.address == senderAddress) {
         found = true;

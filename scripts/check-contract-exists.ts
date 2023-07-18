@@ -38,12 +38,12 @@ program
   .option(
     "--network <network>",
     "specify the Ethereum network to connect to",
-    "local"
+    "local",
   )
   .option("--address <address>", "Ethereum address.")
   .option(
     "--address-file <addressFile>",
-    "Path to file containing contract address."
+    "Path to file containing contract address.",
   );
 program.parse();
 const options = program.opts();
@@ -64,7 +64,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -79,7 +79,7 @@ const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
 if (networkLabelResult.error) {
   var msg = `Invalid network "${networkLabel}". Valid options are: [${config.networkLabelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -90,7 +90,7 @@ let contractAddress: string;
 if (address || addressFile) {
   if ((address && addressFile) || (!address && !addressFile)) {
     console.error(
-      "Only one of the arguments '--address' or '--address-file' can be provided."
+      "Only one of the arguments '--address' or '--address-file' can be provided.",
     );
     program.help(); // Display help and exit
   }

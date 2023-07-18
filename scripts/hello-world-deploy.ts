@@ -42,7 +42,7 @@ program
   .option(
     "--network <network>",
     "specify the Ethereum network to connect to",
-    "local"
+    "local",
   );
 program.parse();
 const options = program.opts();
@@ -77,7 +77,7 @@ const logLevelSchema = Joi.string().valid(...config.logLevelList);
 let logLevelResult = logLevelSchema.validate(logLevel);
 if (logLevelResult.error) {
   var msg = `Invalid log level "${logLevel}". Valid options are: [${config.logLevelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -91,7 +91,7 @@ const networkLabelSchema = Joi.string().valid(...config.networkLabelList);
 let networkLabelResult = networkLabelSchema.validate(networkLabel);
 if (networkLabelResult.error) {
   var msg = `Invalid network "${networkLabel}". Valid options are: [${config.networkLabelList.join(
-    ", "
+    ", ",
   )}]`;
   console.error(msg);
   process.exit(1);
@@ -125,7 +125,7 @@ let signer = new ethers.Wallet(DEPLOYER_PRIVATE_KEY, provider!);
 let contractFactoryHelloWorld = new ethers.ContractFactory(
   contract.abi,
   contract.bytecode,
-  signer
+  signer,
 );
 
 // Run main function
@@ -143,7 +143,7 @@ async function main() {
   // Estimate fees.
   // - Stop if any fee limit is exceeded.
   let txRequest = await contractFactoryHelloWorld.getDeployTransaction(
-    initialMessage
+    initialMessage,
   );
   const estimatedFees = await ethereum.estimateFees({
     provider,
@@ -180,7 +180,7 @@ async function main() {
   log(`Signer balance: ${signerBalanceEth} ETH (${signerBalanceUsd} USD)`);
   if (Big(signerBalanceEth).lt(Big(feeEth))) {
     console.error(
-      `Sender address (${signerAddress}) has a balance that is too low (${signerBalanceEth} ETH). At least ${feeEth} ETH is needed to pay for the deployment transaction.`
+      `Sender address (${signerAddress}) has a balance that is too low (${signerBalanceEth} ETH). At least ${feeEth} ETH is needed to pay for the deployment transaction.`,
     );
     process.exit(1);
   }
@@ -194,7 +194,7 @@ async function main() {
       gasLimit,
       maxFeePerGas: maxFeePerGasWei,
       maxPriorityFeePerGas: maxPriorityFeePerGasWei,
-    }
+    },
   );
   await contractHelloWorld.waitForDeployment();
 

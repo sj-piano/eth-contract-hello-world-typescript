@@ -51,6 +51,8 @@
     "@typescript-eslint/parser": "6.1.0",
     "chai": "4.3.7",
     "eslint": "8.45.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-prettier": "5.0.0",
     "hardhat": "2.15.0",
     "ts-node": "10.9.1",
     "tsconfig-paths": "4.2.0",

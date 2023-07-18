@@ -144,11 +144,16 @@ You can read the contract's stored data at:
 - Ethereum development environment: [`hardhat`](https://hardhat.org)
 - Decimal arithmetic: [`big.ts`](https://mikemcl.github.io/big.ts)
 - Test assertion: [`chai`](https://www.chaijs.com)
-- Javascript formatter: [`prettier`](https://prettier.io)
+- Typescript formatter: [`prettier`](https://prettier.io)
+- Typescript linter: [`eslint`](https://eslint.org)
 - CLI interface: [`commander`](https://github.com/tj/commander.ts)
 - Logging: [`winston`](https://github.com/winstonjs/winston)
 - Data validation: [`joi`](https://github.com/hapijs/joi)
 - JSON validation: [`ajv`](https://ajv.ts.org)
+
+**Plugins:**
+- [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier): Turns off all ESLint rules that have the potential to interfere with Prettier rules.
+- [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier): Turns Prettier rules into ESLint rules.
 
 Private keys are managed in a `user-config.env` file.
 
@@ -696,6 +701,10 @@ A list of helpful resources:
 * Sepolia Testnet block explorer: [sepolia.etherscan.io](https://sepolia.etherscan.io)
 
 * Ethereum Mainnet block explorer: [etherscan.io](https://etherscan.io)
+
+* Typescript Linting advice from Khalil Stemmler:  
+** [How to use ESLint with TypeScript](https://khalilstemmler.com/blogs/typescript/eslint-for-typescript)
+** [How to use Prettier with ESLint and TypeScript in VSCode](https://khalilstemmler.com/blogs/tooling/prettier)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

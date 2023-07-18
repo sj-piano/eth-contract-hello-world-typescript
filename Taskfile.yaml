@@ -32,20 +32,20 @@ tasks:
       - cat example-script-commands.txt
     silent: true
 
-  check-js-formatting:
-    desc: "Check the formatting of the Javascript code"
+  check-formatting:
+    desc: "Check the formatting of the Typescript code"
     cmds:
       - npx prettier --config .prettierrc './**/*.ts' --check
     silent: true
 
-  fix-js-formatting:
-    desc: "Reformat the Javascript code"
+  fix-formatting:
+    desc: "Reformat the Typescript code"
     cmds:
       - npx prettier --config .prettierrc './**/*.ts' --write
     silent: true
 
   lint:
-    desc: "Lint the Javascript code"
+    desc: "Lint the Typescript code"
     cmds:
       - npx eslint './**/*.ts'
     silent: true

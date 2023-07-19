@@ -122,6 +122,8 @@ async function main() {
   let blockNumber = await provider.getBlockNumber();
   deb(`Current block number: ${blockNumber}`);
 
+  log(`Getting balance for address ${address}...`);
+
   let balanceWei = await provider.getBalance(address);
   let balanceEth = ethers.formatEther(balanceWei);
   let ethToUsd = await ethereum.getEthereumPriceInUsd();

@@ -355,6 +355,8 @@ npm run --silent ts-node scripts/get-network-fees.ts -- --network=mainnet
 ### <a id="walkthrough-local" />Walkthrough - Local Network
 
 
+For demonstration purposes, we'll use slightly higher levels of logging during this local walkthrough.
+
 We deploy the HelloWorld contract to the local blockchain (started with `task start-local-node`).
 
 See the balance of the address that will deploy the contract:  
@@ -369,10 +371,10 @@ Deploy the HelloWorld contract:
 This will output an address. Copy this address into the `user-config.env` file as `LOCAL_HARDHAT_DEPLOYED_CONTRACT_ADDRESS`.
 
 Confirm deployment:  
-`npm run --silent ts-node scripts/check-contract-exists`
+`npm run --silent ts-node scripts/check-contract-exists -- --debug`
 
 Print the message stored in the contract:  
-`npm run --silent ts-node scripts/hello-world-get-message.ts`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --debug`
 
 Create a new input file:  
 `cp input-data/example-update-message.json input-data/update-message-local-network.json`
@@ -380,7 +382,7 @@ Create a new input file:
 Open it and specify a new message e.g. `Hello Mars ! (local)`.
 
 Update the message stored in the contract:  
-`npm run --silent ts-node scripts/hello-world-update-message.ts -- -- --input-file-json input-data/update-message-local-network.json`
+`npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/update-message-local-network.json --log-level info`
 
 Print the new message stored in the contract:  
 `npm run --silent ts-node scripts/hello-world-get-message.ts`
@@ -399,8 +401,6 @@ Example output:
 
 
 You'll need some SepoliaETH for using the Sepolia Testnet. In your Metamask wallet, create a dedicated "Test" account. Switch to "Sepolia test network". Copy the address. Go to a Sepolia testnet faucet (e.g. this [PoW faucet](https://sepolia-faucet.pk910.de)) and get some SepoliaETH. Set the destination address to be your Metamask test address.
-
-We will use the `info` logging level throughout this walkthrough.
 
 Create a new private key and store it in the `input-data` directory:  
 `npm run --silent ts-node scripts/create-private-key.ts > input-data/sepolia-testnet-private-key.txt`
@@ -421,21 +421,21 @@ Store it in the `user-config.env` file as `SEPOLIA_TESTNET_ADDRESS`.
 In Metamask, transfer a reasonable amount of SepoliaETH to this new address.
 
 See the balance of the address that will deploy the contract:  
-`npm run --silent ts-node scripts/get-balance.ts --network=testnet --log-level info -- --address-file input-data/sepolia-testnet-address.txt`
+`npm run --silent ts-node scripts/get-balance.ts --network=testnet --address-file input-data/sepolia-testnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
 `npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=testnet`
 
 Deploy the contract to the Sepolia testnet:  
-`npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=testnet`
 
 This will output an address. Copy this address into the `user-config.env` file as `SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS`.
 
 Confirm deployment:  
-`npm run --silent ts-node scripts/check-contract-exists -- --network=testnet --log-level info`
+`npm run --silent ts-node scripts/check-contract-exists -- --network=testnet`
 
 Print the message stored in the contract:  
-`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet`
 
 Create a new input file:
 `cp input-data/example-update-message.json input-data/update-message-sepolia-testnet.json`
@@ -443,14 +443,16 @@ Create a new input file:
 Open it and specify a new message e.g. `Hello Mars ! (testnet)`.
 
 Update the message stored in the contract:  
-`npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=testnet --log-level info --input-file-json input-data/update-message-sepolia-testnet.json`
+`npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=testnet --input-file-json input-data/update-message-sepolia-testnet.json`
 
 Print the new message stored in the contract:  
-`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet`
 
 Example output:
 
-![](images/walkthrough_sepolia_testnet.png)
+```
+foo
+```
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -471,7 +473,7 @@ Note: If you know what you're doing, and you already have a capable transaction 
 
 So, let's begin.
 
-We will use the `info` logging level throughout this walkthrough.
+We use the log level `info` throughout. This provides extra information that will help us understand what went wrong if a problem occurs.
 
 In your Metamask wallet, create a dedicated "Test" account. Switch to "Ethereum Mainnet". We assume that you already have some Ethereum in Metamask or in another wallet tool. Transfer some ETH to this address. Copy the address.
 
@@ -491,7 +493,7 @@ See the balance of the address that will deploy the contract:
 `npm run --silent ts-node scripts/get-balance.ts -- --network=mainnet --log-level info --address-file input-data/ethereum-mainnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
-`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet`
+`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet --log-level info`
 
 Deploy the contract to the Ethereum mainnet:  
 `npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=mainnet --log-level info`
@@ -517,7 +519,9 @@ Print the new message stored in the contract:
 
 Example output:
 
-![](images/walkthrough_ethereum_mainnet.png)
+```
+foo
+```
 
 Note: After seeing the estimated fees, I set `MAX_FEE_PER_TRANSACTION_USD` in `user-config.env` to be `"20.00"`.
 

@@ -59,33 +59,33 @@ tasks:
   check-network-connections:
     desc: "Check the connections to the various Ethereum networks"
     cmds:
-      - node scripts/check-network-connections.js
+      - npm run --silent ts-node scripts/check-network-connections.ts
     silent: true
 
   deploy-local:
     desc: "Deploy the HelloWorld contract to a Hardhat node running locally"
     cmds:
-      - npx hardhat run scripts/hello-world-deploy.js --network local
+      - npm run --silent ts-node scripts/hello-world-deploy.ts --network local
     silent: true
 
   deploy-testnet:
     desc: "Deploy the HelloWorld contract to the Sepolia testnet"
     cmds:
-      - npx hardhat run scripts/hello-world-deploy.js --network sepolia
+      - npm run --silent ts-node scripts/hello-world-deploy.js --network sepolia
     silent: true
     prompt: This command will spend testnet Ethereum (SepoliaETH) - Do you want to continue?
 
   deploy-mainnet:
     desc: "Deploy the HelloWorld contract to the Ethereum mainnet"
     cmds:
-      - npx hardhat run scripts/hello-world-deploy.js --network mainnet
+      - npm run --silent ts-node scripts/hello-world-deploy.js --network mainnet
     silent: true
     prompt: This command will spend Ethereum (ETH) - Do you want to continue?
 
   hello-world-get-message:
     internal: true
     cmds:
-      - node scripts/hello-world-get-message.js {{.CLI_ARGS}}
+      - npm run --silent ts-node scripts/hello-world-get-message.js {{.CLI_ARGS}}
     silent: true
 
   get-message:

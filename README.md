@@ -53,7 +53,7 @@
       <ul>
         <li><a href="#notes">Notes</a></li>
         <li><a href="#fee-limit-protections">Fee Limit Protections</a></li>
-        <li><a href="#initial-tests">Initial Tests</a></li>
+        <li><a href="#initial-setup">Initial Setup</a></li>
         <li><a href="#walkthrough-local">Walkthrough - Local Network</a></li>
         <li><a href="#walkthrough-testnet">Walkthrough - Sepolia Testnet</a></li>
         <li><a href="#walkthrough-mainnet">Walkthrough - Ethereum Mainnet</a></li>
@@ -245,7 +245,7 @@ Notes:
 Most scripts accept a `network` argument, which specifies whether the script should connect to the local development blockchain (`local`), the Sepolia testnet (`testnet`), or the Ethereum mainnet (`mainnet`).
 
 Most scripts have `--help` functionality. E.g. you can run:  
-`npm run --silent ts-npm run --silent ts-node scripts/hello-world-update-message.ts -- --help`
+`npm run --silent ts-node scripts/get-network-fees.ts -- --help`
 
 Most scripts can log at different levels of output. You can use `--log-level info` or `--debug` arguments.
 
@@ -295,7 +295,8 @@ stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hell
 
 
 
-### Initial Tests
+### Initial Setup
+
 
 See available commands:  
 
@@ -326,6 +327,15 @@ task compile-contracts
 task test
 ```
 
+Hardhat runs the tests on a temporary local blockchain.
+
+We will start a more persistent local blockchain instance.
+
+Open another terminal and run:  
+`task start-local-node`
+
+Leave the node running in this additional terminal. Log output will be displayed (the initial set of pre-loaded keypairs will be shown). Press Ctrl-C to stop the local node. Switch back to the original terminal and continue.
+
 Check the fees on the various networks.
 
 ```sh
@@ -345,14 +355,7 @@ npm run --silent ts-node scripts/get-network-fees.ts -- --network=mainnet
 ### <a id="walkthrough-local" />Walkthrough - Local Network
 
 
-Hardhat runs the tests on a temporary local blockchain.
-
-We set up a more persistent local blockchain, and deploy the HelloWorld contract to it.
-
-Open another terminal and run:  
-`task start-local-node`
-
-Leave the node running in this additional terminal. Log output will be displayed (the initial set of pre-loaded keypairs will be shown). Press Ctrl-C to stop the local node. Switch back to the original terminal and continue.
+We deploy the HelloWorld contract to the local blockchain (started with `task start-local-node`).
 
 See the balance of the address that will deploy the contract:  
 `npm run --silent ts-node scripts/get-balance.ts -- --address-file input-data/local-hardhat-address.txt`

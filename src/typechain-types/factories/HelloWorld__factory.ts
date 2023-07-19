@@ -78,7 +78,7 @@ type HelloWorldConstructorParams =
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: HelloWorldConstructorParams,
+  xs: HelloWorldConstructorParams
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
 export class HelloWorld__factory extends ContractFactory {
@@ -92,13 +92,13 @@ export class HelloWorld__factory extends ContractFactory {
 
   override getDeployTransaction(
     initMessage: string,
-    overrides?: NonPayableOverrides & { from?: string },
+    overrides?: NonPayableOverrides & { from?: string }
   ): Promise<ContractDeployTransaction> {
     return super.getDeployTransaction(initMessage, overrides || {});
   }
   override deploy(
     initMessage: string,
-    overrides?: NonPayableOverrides & { from?: string },
+    overrides?: NonPayableOverrides & { from?: string }
   ) {
     return super.deploy(initMessage, overrides || {}) as Promise<
       HelloWorld & {

@@ -266,27 +266,27 @@ The two "action" scripts, `hello-world-deploy.ts` and `hello-world-update-messag
 
 You can of course change the limits in the `user-config.env` file if you wish, allowing a script to spend more money in order to broadcast the transaction.
 
-Example output:
+Example output, after setting `MAX_FEE_PER_TRANSACTION_USD = "0.01"`:
 
 ```bash
 stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-estimate-fees.ts
 
 Contract deployment - estimated fee:
-- baseFeeUsd limit exceeded: Base fee (0.60 USD) exceeds limit specified in config (0.01 USD). Current base fee is 315900.363483886 gwei (315900363483886 wei, 0.000315900363483886 ETH). Current ETH-USD exchange rate is 1914.12 USD.
+- baseFeeUsd limit exceeded: Base fee (0.95 USD) exceeds limit specified in config (0.01 USD). Current base fee is 498906.625 gwei (498906625000000 wei, 0.000498906625 ETH). Current ETH-USD exchange rate is 1908.57 USD.
 
 Contract method call: 'update' - estimated fee:
-- baseFeeUsd limit exceeded: Base fee (0.05 USD) exceeds limit specified in config (0.01 USD). Current base fee is 25406.370781243 gwei (25406370781243 wei, 0.000025406370781243 ETH). Current ETH-USD exchange rate is 1914.12 USD.
+- baseFeeUsd limit exceeded: Base fee (0.06 USD) exceeds limit specified in config (0.01 USD). Current base fee is 32019.75 gwei (32019750000000 wei, 0.00003201975 ETH). Current ETH-USD exchange rate is 1908.57 USD.
 
 stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/get-balance.ts -- --address-file input-data/local-hardhat-address.txt
-9999.997914890304585096
+9999.9987527334375 ETH (19077697.62 USD)
 
 stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-deploy.ts -- --log-level info
-[2023-07-02 22:28:29.666] info:         Connecting to local network at http://localhost:8545...
-[2023-07-02 22:28:29.984] info:         Estimated fee: 0.000005224714991797 ETH (0.01 USD)
-- baseFeeUsd: Base fee (0.60 USD) exceeds limit specified in config (0.01 USD). Current base fee is 315900.363483886 gwei (315900363483886 wei, 0.000315900363483886 ETH). Current ETH-USD exchange rate is 1913.98 USD.
+info:   Connecting to local network at http://localhost:8545...
+info:   Estimated fee: 0.000005242106697840 ETH (0.01 USD)
+- baseFeeUsd: Base fee (0.95 USD) exceeds limit specified in config (0.01 USD). Current base fee is 498906.625 gwei (498906625000000 wei, 0.000498906625 ETH). Current ETH-USD exchange rate is 1907.63 USD.
 
 stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-update-message.ts -- --input-file-json input-data/update-message-local-network.json
-- baseFeeUsd: Base fee (0.04 USD) exceeds limit specified in config (0.01 USD). Current base fee is 23505.742548599 gwei (23505742548599 wei, 0.000023505742548599 ETH). Current ETH-USD exchange rate is 1914.22 USD.
+- baseFeeUsd: Base fee (0.06 USD) exceeds limit specified in config (0.01 USD). Current base fee is 32009.25 gwei (32009250000000 wei, 0.00003200925 ETH). Current ETH-USD exchange rate is 1907.72 USD.
 ```
 
 
@@ -355,7 +355,7 @@ npm run --silent ts-node scripts/get-network-fees.ts -- --network=mainnet
 ### <a id="walkthrough-local" />Walkthrough - Local Network
 
 
-For demonstration purposes, we'll use slightly higher levels of logging during this local walkthrough.
+For demonstration purposes, we'll use reasonably high levels of logging during this local walkthrough.
 
 We deploy the HelloWorld contract to the local blockchain (started with `task start-local-node`).
 
@@ -421,7 +421,7 @@ Store it in the `user-config.env` file as `SEPOLIA_TESTNET_ADDRESS`.
 In Metamask, transfer a reasonable amount of SepoliaETH to this new address.
 
 See the balance of the address that will deploy the contract:  
-`npm run --silent ts-node scripts/get-balance.ts --network=testnet --address-file input-data/sepolia-testnet-address.txt`
+`npm run --silent ts-node scripts/get-balance.ts -- --network=testnet --address-file input-data/sepolia-testnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
 `npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=testnet`
@@ -450,8 +450,39 @@ Print the new message stored in the contract:
 
 Example output:
 
-```
-foo
+```bash
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/get-balance.ts -- --network=testnet --address-file input-data/sepolia-testnet-address.txt
+0.409023392670777583 ETH (780.81 USD)
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=testnet
+
+Contract deployment - estimated fee:
+- feeEth: 0.000000001001234324
+- feeUsd: 0.00
+
+No contract found at address 0x0000000000000000000000000000000000000000.
+
+Contract method call: 'update' - estimated fee:
+- feeEth: 0.000000000038147344
+- feeUsd: 0.00
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=testnet
+0x02bCCb6Fa3e24b14566e571656EE53A7723884f7
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/check-contract-exists -- --network=testnet
+Contract found at address: 0x02bCCb6Fa3e24b14566e571656EE53A7723884f7
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet
+Hello World!
+
+stjohn@judgement:~/work/contract-template$ cp input-data/example-update-message.json input-data/update-message-sepolia-testnet.json
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=testnet --input-file-json input-data/update-message-sepolia-testnet.json
+The new message is:
+Hello Mars ! (testnet)
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=testnet
+Hello Mars ! (testnet)
 ```
 
 
@@ -552,27 +583,27 @@ npx hardhat verify --network sepolia $SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS 
 Example output:
 
 ```bash
-stjohn@judgement:~/work/contract-template$ SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS="0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1"
+stjohn@judgement:~/work/contract-template$ SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS="0x02bCCb6Fa3e24b14566e571656EE53A7723884f7"
 
 stjohn@judgement:~/work/contract-template$ npx hardhat verify --network sepolia $SEPOLIA_TESTNET_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
 Successfully submitted source code for contract
-contracts/HelloWorld.sol:HelloWorld at 0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1
+contracts/HelloWorld.sol:HelloWorld at 0x02bCCb6Fa3e24b14566e571656EE53A7723884f7
 for verification on the block explorer. Waiting for verification result...
 
 Successfully verified contract HelloWorld on the block explorer.
-https://sepolia.etherscan.io/address/0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1#code
+https://sepolia.etherscan.io/address/0x02bCCb6Fa3e24b14566e571656EE53A7723884f7#code
 ```
 
 Summary:
 
 The contract has been deployed to the Sepolia Testnet at this address:  
-`0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1`
+`0x02bCCb6Fa3e24b14566e571656EE53A7723884f7`
 
 The contract is published here:  
-[sepolia.etherscan.io/address/0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1#code](https://sepolia.etherscan.io/address/0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1#code)
+[sepolia.etherscan.io/address/0x02bCCb6Fa3e24b14566e571656EE53A7723884f7#code](https://sepolia.etherscan.io/address/0x02bCCb6Fa3e24b14566e571656EE53A7723884f7#code)
 
 You can read the contract's stored data at:  
-[sepolia.etherscan.io/address/0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1#readContract](https://sepolia.etherscan.io/address/0x0FdEe0538a2092937c68A4954e3f5adDb7532fC1#readContract)
+[sepolia.etherscan.io/address/0x02bCCb6Fa3e24b14566e571656EE53A7723884f7#readContract](https://sepolia.etherscan.io/address/0x02bCCb6Fa3e24b14566e571656EE53A7723884f7#readContract)
 
 
 #### We publish the Ethereum Mainnet instance of the contract

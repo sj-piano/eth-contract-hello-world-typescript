@@ -116,13 +116,13 @@ If you would like to add me as a professional contact, you can [send me a connec
 
 
 The contract has been deployed to the Ethereum Mainnet at this address:  
-`[NOT DONE]`
+`0xc2963E4f4C8456b21734c7c4811327A94324851E`
 
 The contract is published here:  
-[NOT DONE](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code)
+[etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#code](https://etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#code)
 
 You can read the contract's stored data at:  
-[NOT DONE](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract)
+[etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#readContract](https://etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#readContract)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -156,6 +156,7 @@ You can read the contract's stored data at:
 - [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier): Turns Prettier rules into ESLint rules.
 
 Private keys are managed in a `user-config.env` file.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -504,7 +505,7 @@ Note: If you know what you're doing, and you already have a capable transaction 
 
 So, let's begin.
 
-We use the log level `info` throughout. This provides extra information that will help us understand what went wrong if a problem occurs.
+We generally use the log level `info` here. This provides extra information that will help us understand what went wrong if a problem occurs.
 
 In your Metamask wallet, create a dedicated "Test" account. Switch to "Ethereum Mainnet". We assume that you already have some Ethereum in Metamask or in another wallet tool. Transfer some ETH to this address. Copy the address.
 
@@ -524,7 +525,9 @@ See the balance of the address that will deploy the contract:
 `npm run --silent ts-node scripts/get-balance.ts -- --network=mainnet --log-level info --address-file input-data/ethereum-mainnet-address.txt`
 
 See fee estimations for the different contract operations, including deployment:  
-`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet --log-level info`
+`npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet`
+
+If a fee limit is exceeded, and you are willing to spend the money, increase the `MAX_FEE_PER_TRANSACTION_USD` value in `user-config.env`. Re-run the `hello-world-estimate-fees.ts` command above to confirm that no fee limit will be exceeded.
 
 Deploy the contract to the Ethereum mainnet:  
 `npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=mainnet --log-level info`
@@ -550,11 +553,71 @@ Print the new message stored in the contract:
 
 Example output:
 
-```
-foo
-```
+```bash
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/get-balance.ts -- --network=mainnet --log-level info --address-file input-data/ethereum-mainnet-address.txt
+info:   Connecting to Ethereum mainnet...
+info:   Getting balance for address 0x4A846013314b892Be429F8626487109DD7b494a0...
+0.042281201108669793 ETH (80.73 USD)
 
-Note: After seeing the estimated fees, I set `MAX_FEE_PER_TRANSACTION_USD` in `user-config.env` to be `"20.00"`.
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet
+
+Contract deployment - estimated fee:
+- baseFeeUsd limit exceeded: Base fee (17.47 USD) exceeds limit specified in config (5.00 USD). Current base fee is 9149184.714182905 gwei (9149184714182905 wei, 0.009149184714182905 ETH). Current ETH-USD exchange rate is 1909.52 USD.
+
+No contract found at address 0x0000000000000000000000000000000000000000.
+
+Contract method call: 'update' - estimated fee:
+- feeEth: 0.00035021612752418
+- feeUsd: 0.67
+
+# Here, after seeing the estimated fees, I set the MAX_FEE_PER_TRANSACTION_USD value in user-config.env to "20.00".
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-estimate-fees.ts -- --network=mainnet
+
+Contract deployment - estimated fee:
+- feeEth: 0.009101423868100018
+- feeUsd: 17.39
+
+No contract found at address 0x0000000000000000000000000000000000000000.
+
+Contract method call: 'update' - estimated fee:
+- feeEth: 0.000346767124202408
+- feeUsd: 0.66
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-deploy.ts -- --network=mainnet --log-level info
+info:   Connecting to Ethereum mainnet...
+info:   Estimated fee: 0.009271102473677687 ETH (17.71 USD)
+info:   Signer balance: 0.042281201108669793 ETH (80.77 USD)
+info:   Final fee: 0.009006010206038837 ETH (17.21 USD)
+info:   Contract deployed to address:
+0xc2963E4f4C8456b21734c7c4811327A94324851E
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/check-contract-exists -- --network=mainnet --log-level info
+info:   Connecting to Ethereum mainnet...
+Contract found at address: 0xc2963E4f4C8456b21734c7c4811327A94324851E
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=mainnet --log-level info
+info:   Connecting to Ethereum mainnet...
+info:   Contract found at address: 0xc2963E4f4C8456b21734c7c4811327A94324851E
+info:   Message stored in HelloWorld contract:
+Hello World!
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-update-message.ts -- --network=mainnet --log-level info --input-file-json input-data/update-message-ethereum-mainnet.json
+info:   Connecting to Ethereum mainnet...
+info:   Contract found at address: 0xc2963E4f4C8456b21734c7c4811327A94324851E
+info:   Message stored in HelloWorld contract: Hello World!
+info:   Estimated fee: 0.000573907171238688 ETH (1.10 USD)
+info:   Signer balance: 0.033275190902630956 ETH (63.53 USD)
+info:   Updating the message...
+info:   Final fee: 0.000581844011532384 ETH (1.11 USD)
+The new message is:
+Hello Mars ! (mainnet)
+
+stjohn@judgement:~/work/contract-template$ npm run --silent ts-node scripts/hello-world-get-message.ts -- --network=mainnet --log-level info
+info:   Connecting to Ethereum mainnet...
+info:   Contract found at address: 0xc2963E4f4C8456b21734c7c4811327A94324851E
+info:   Message stored in HelloWorld contract:
+Hello Mars ! (mainnet)
+```
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -609,34 +672,34 @@ You can read the contract's stored data at:
 #### We publish the Ethereum Mainnet instance of the contract
 
 ```bash
-ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0x50590A974646d333A93F89a37aBd2d2708671eAA"
+ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0xc2963E4f4C8456b21734c7c4811327A94324851E"
 npx hardhat verify --network mainnet $ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
 ```
 
 Example output:
 
 ```bash
-stjohn@judgement:~/work/contract-template$ ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0x50590A974646d333A93F89a37aBd2d2708671eAA"
+stjohn@judgement:~/work/contract-template$ ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS="0xc2963E4f4C8456b21734c7c4811327A94324851E"
 
 stjohn@judgement:~/work/contract-template$ npx hardhat verify --network mainnet $ETHEREUM_MAIN_DEPLOYED_CONTRACT_ADDRESS "Hello World!"
 Successfully submitted source code for contract
-contracts/HelloWorld.sol:HelloWorld at 0x50590A974646d333A93F89a37aBd2d2708671eAA
+contracts/HelloWorld.sol:HelloWorld at 0xc2963E4f4C8456b21734c7c4811327A94324851E
 for verification on the block explorer. Waiting for verification result...
 
 Successfully verified contract HelloWorld on the block explorer.
-https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code
+https://etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#code
 ```
 
 Summary:
 
 The contract has been deployed to the Ethereum Mainnet at this address:  
-`0x50590A974646d333A93F89a37aBd2d2708671eAA`
+`0xc2963E4f4C8456b21734c7c4811327A94324851E`
 
 The contract is published here:  
-[etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#code)
+[etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#code](https://etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#code)
 
 You can read the contract's stored data at:  
-[etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract](https://etherscan.io/address/0x50590A974646d333A93F89a37aBd2d2708671eAA#readContract)
+[etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#readContract](https://etherscan.io/address/0xc2963E4f4C8456b21734c7c4811327A94324851E#readContract)
 
 
 

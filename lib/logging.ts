@@ -15,11 +15,11 @@ class Logger {
     {
       fileName,
       logLevel,
-      timestamp,
-    }: { fileName?: string; logLevel?: string; timestamp?: boolean } = {
+      logTimestamp,
+    }: { fileName?: string; logLevel?: string; logTimestamp?: boolean } = {
       fileName: "",
       logLevel: "error",
-      timestamp: false,
+      logTimestamp: false,
     },
   ) {
     if (fileName) {
@@ -32,7 +32,7 @@ class Logger {
       if (fileName) {
         s = `${fileName}: ` + s;
       }
-      if (timestamp) {
+      if (logTimestamp) {
         s = `${timestamp} ` + s;
       }
       return s;
@@ -99,13 +99,12 @@ class Logger {
 
 // Functions
 
-//function createLogger({fileName, logLevel, timestamp}: {fileName?: string, logLevel?: string, timestamp?: boolean} = { fileName: '', logLevel: 'error', timestamp: false}) {
 function createLogger({
   fileName,
   logLevel,
-  timestamp,
-}: { fileName?: string; logLevel?: string; timestamp?: boolean } = {}) {
-  const logger = new Logger({ fileName, logLevel, timestamp });
+  logTimestamp,
+}: { fileName?: string; logLevel?: string; logTimestamp?: boolean } = {}) {
+  const logger = new Logger({ fileName, logLevel, logTimestamp });
   const log = logger.log.bind(logger);
   const deb = logger.deb.bind(logger);
   return { logger, log, deb };

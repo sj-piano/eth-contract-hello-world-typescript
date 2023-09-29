@@ -98,7 +98,7 @@ A ready-for-production Ethereum smart contract project template, written in Soli
 * make a complaint
 * hire me
 
-Then [please contact me on Tela](https://www.tela.app/magic/stjohn_piano/a852c8). Thank you.
+Then [please contact me on Tela](https://www.tela.app/magic/stjohn_piano/ea344e). Thank you.
 
 [![Tela][tela-shield]][tela-url]
 
@@ -765,7 +765,7 @@ Project Link:
 * make a complaint
 * hire me
 
-Then [please contact me on Tela](https://www.tela.app/magic/stjohn_piano/a852c8). Thank you.
+Then [please contact me on Tela](https://www.tela.app/magic/stjohn_piano/ea344e). Thank you.
 
 [![Tela][tela-shield]][tela-url]
 
@@ -820,4 +820,4 @@ A list of helpful resources:
 [linkedin-shield]: https://img.shields.io/badge/LinkedIn-StJohn_Piano-blue.svg?style=for-the-badge&logo=linkedin
 [linkedin-url]: https://linkedin.com/in/stjohnpiano
 [tela-shield]: https://img.shields.io/badge/Tela-StJohn_Piano-blue?style=for-the-badge
-[tela-url]: https://www.tela.app/magic/stjohn_piano/a852c8
+[tela-url]: https://www.tela.app/magic/stjohn_piano/ea344e
